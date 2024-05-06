@@ -108,7 +108,7 @@ struct Graphics {
 
     void prepareScene()
     {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 256);
         SDL_RenderClear(renderer);
     }
 

@@ -21,14 +21,38 @@ void Column::update() {
     destRect2.x -= 2;
 }
 
-void Column::update_up() {
-    destRect1.y -= 2;
-    destRect2.y -= 2;
+void Column::update_up(long& v, long Count, bool& test2) {
+    if (Count > 20) {
+        if (Count == 10*v) v++;
+        if (destRect1.y >= -260 && test2) {
+            destRect1.y -= v;
+            destRect2.y -= v;
+            if (destRect1.y < -260) test2 = false;
+        } else {
+            if (destRect1.y <= -95 && !test2) {
+                destRect1.y += v;
+                destRect2.y += v;
+            }
+            else test2 = true;
+        }
+    }
 }
 
-void Column::update_down() {
-    destRect1.y += 2;
-    destRect2.y += 2;
+void Column::update_down(long& v, long Count, bool& test2) {
+    if (Count > 20) {
+        if (Count == 10*v) v++;
+        if (destRect1.y <= -95 && test2) {
+            destRect1.y += v;
+            destRect2.y += v;
+            if (destRect1.y > -95) test2 = false;
+        } else {
+            if (destRect1.y >= -260 && !test2) {
+                destRect1.y -= v;
+                destRect2.y -= v;
+            }
+            else test2 = true;
+        }
+    }
 }
 
 void Column::render() {
@@ -37,6 +61,6 @@ void Column::render() {
 }
 
 bool Column::grade() {
-    return destRect1.x == 114-50;
+    return destRect1.x == 64;
 }
 

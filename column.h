@@ -8,8 +8,8 @@ public:
     ~Column();
 
     void update();
-    void update_up();
-    void update_down();
+    void update_up(long& v, long Count, bool& test2);
+    void update_down(long& v, long Count, bool& test2);
     void render();
     bool grade();
 

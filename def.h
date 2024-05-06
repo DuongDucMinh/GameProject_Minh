@@ -15,6 +15,22 @@ const int FL_BIRD_CLIPS[][4] = {
 };
 const int FL_BIRD_FRAMES = sizeof(FL_BIRD_CLIPS)/sizeof(int)/4;
 
+const int FL_BLUE_BIRD_CLIPS[][4] = {
+    {  0, 0, 44, 42},
+    { 44, 0, 44, 42},
+    { 88, 0, 44, 42},
+    {132, 0, 44, 42},
+    {  0,42, 44, 42},
+    { 44,42, 44, 42},
+    { 88,42, 44, 42},
+    {132,42, 44, 42},
+    {  0,84, 44, 42},
+    { 44,84, 44, 42},
+    { 88,84, 44, 42},
+    {132,84, 44, 42},
+};
+const int FL_BLUE_BIRD_FRAMES = sizeof(FL_BLUE_BIRD_CLIPS)/sizeof(int)/4;
+
 
 #endif
 

@@ -43,22 +43,16 @@ int main(int argc, char *argv[])
 
     deque<Column*> nyc;
 
-    // KHỞI TẠO TIẾNG KÊU KHI NHẢY
+    // KHỞI TẠO ÂM THANH
     Mix_Chunk *gJump = graphics.loadSound("sound\\flappy_whoosh.mp3");
-
-    // KHỞI TẠO TIẾNG TING KHI CHIM QUA CỘT
     Mix_Chunk *fpass = graphics.loadSound("sound\\sound_ting.mp3");
-
-    // KHỞI TẠO ÂM THANH KHI THUA
     Mix_Chunk *gOver = graphics.loadSound("sound\\sound_gameover.mp3");
+    Mix_Chunk *touch = graphics.loadSound("sound\\touch_column.mp3");
 
     // KHỞI TẠO HẠT GIỐNG NGẪU NHIÊN
     srand(time(NULL));
 
-    // KHỞI TẠO CỘT
-    Column* colu = new Column();
-
-    // KHOI TAO ANH
+    // KHỞI TẠO ẢNH
     SDL_Texture* start_fb = graphics.loadTexture("picture\\start_flappy.png");
     SDL_Texture* replay = graphics.loadTexture("picture\\replay.png");
     SDL_Texture* replay_click = graphics.loadTexture("picture\\replay_click.png");
@@ -66,6 +60,9 @@ int main(int argc, char *argv[])
     SDL_Texture* Exit_click = graphics.loadTexture("picture\\quit_click.png");
     SDL_Texture* playAgain= graphics.loadTexture("picture\\playAgain.jpg");
     SDL_Texture* playAgain_click= graphics.loadTexture("picture\\playAgain_click.png");
+    SDL_Texture* Continue= graphics.loadTexture("picture\\continue.jpg");
+    SDL_Texture* Continue_click= graphics.loadTexture("picture\\continue_click.png");
+    SDL_Texture* pauseTab = graphics.loadTexture("picture\\pauseTab.png");
     SDL_Texture* gameOver = graphics.loadTexture("picture\\gameOver.png");
     SDL_Texture* silver = graphics.loadTexture("picture\\silver.png");
     SDL_Texture* honor = graphics.loadTexture("picture\\honor.png");
@@ -83,6 +80,7 @@ int main(int argc, char *argv[])
     land.setTexture(graphics.loadTexture("picture\\land.png"));
 
     // KHAI BÁO CÁI CỘT
+    Column* colu = new Column();
     Graphics::col1 = graphics.loadTexture("picture\\pipe_up.png");
     Graphics::col2 = graphics.loadTexture("picture\\pipe_down.jpg");
     Uint32 startTime = SDL_GetTicks();
@@ -91,6 +89,10 @@ int main(int argc, char *argv[])
     Sprite flappy_bird;
     SDL_Texture* FL_Bird_Texture = graphics.loadTexture("picture\\bird.png");
     flappy_bird.init(FL_Bird_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+
+    Sprite flappy_blue_bird;
+    SDL_Texture* FL_BLUE_BiRD_Texture = graphics.loadTexture("picture\\blue_bird.png");
+    flappy_blue_bird.init(FL_BLUE_BiRD_Texture, FL_BLUE_BIRD_FRAMES, FL_BLUE_BIRD_CLIPS);
 
     // KHAI BÁO CHỮ
     TTF_Font* font = graphics.loadFont("Gameplay Regular.ttf", 35);
@@ -135,11 +137,12 @@ int main(int argc, char *argv[])
         SDL_Delay(17);
     }
 
-    long Count = 0, dem = 0, die_count = 3;
-    bool test = true;
+    long Count = 0, dem = 0, die_count = 3, v = 1;
+    bool test = true, test2 = true, test3 = true;
 
     quit = false;
 
+    // VÒNG LẶP CHÍNH
     while (!quit ) {
 
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
@@ -157,7 +160,6 @@ int main(int argc, char *argv[])
         background.scroll(2);
         graphics.render_back(background);
 
-
         // TẠO CỘT
         if (dem >= 50) {
             Uint32 currentTime = SDL_GetTicks();
@@ -172,13 +174,20 @@ int main(int argc, char *argv[])
 
             while (!nyc.empty()) {
                 nyc.front()->update();
-                if (nyc.front()->destRect1.y >= -260 && nyc.front()->destRect1.y <= -94) {nyc.front()->update_up();
-                        if (nyc.front()->destRect1.y == -94) nyc.front()->update_down();
+
+                if (test3) {
+                    nyc.front()->update_up( v, Count, test2);
+                } else {
+                    nyc.front()->update_down( v, Count, test2);
                 }
-                if (mouse.touch(nyc.front()) && test) {
-                    test = false;
-                    die_count--;
-                    if (die_count == 0) quit = true; //if (gameOver2(mouse, )) quit = true;
+
+                if (mouse.touch(nyc.front()) ) {
+                    graphics.play(touch);
+                    if (test) {
+                        test = false;
+                        die_count--;
+                        if (die_count == 0) quit = true; //if (gameOver2(mouse, )) quit = true;
+                    }
                 }
 
                 nyc.front()->render();
@@ -186,17 +195,18 @@ int main(int argc, char *argv[])
                 if (nyc.front()->destRect1.x + COLUMN_WIDTH < 0) {
                     nyc.pop_front();
                     test = true;
+                    test3 = rand() % 2;
                 } else {
                     break;
                 }
-            }
 
+            }
             if (nyc.front()->grade()) {
                 graphics.play(fpass);
                 Count++;
-
                 if (Count >= maxScore) maxScore = Count;
             }
+
         }
 
         // TẠO LAND
@@ -228,14 +238,31 @@ int main(int argc, char *argv[])
                     graphics.renderTexture(unpause, 20 , 20 );
                     graphics.presentScene();
                     while (true) {
-                         SDL_Event e;
-                         SDL_PollEvent(&e);
-                         SDL_GetMouseState(&x, &y);
-                         if ( e.type == SDL_QUIT ) exit(0);
-                         if (x > 20 && x < 52 && y > 20 && y < 54 && e.type == SDL_MOUSEBUTTONDOWN) {
-                            SDL_Delay(100);
-                            break;
-                         }
+                        SDL_Event e;
+                        SDL_PollEvent(&e);
+                        SDL_GetMouseState(&x, &y);
+
+                        if ( e.type == SDL_QUIT ) exit(0);
+                        if ( e.type == SDL_MOUSEBUTTONDOWN) {
+                            if ((x > 20 && x < 52 && y > 20 && y < 54) ||
+                                    (x > 120 && x < (120+110) && y > 300 && y < (300+40))) {
+                                SDL_Delay(100);
+                                break;
+                            }
+                            if (x > 180 && x < (180+110) && y > 370 && y < (370+40)) exit(0);
+                            if (x > 60 && x < (60+110) && y > 370 && y < (370+40)) {
+                                    nyc.pop_front();
+                                    goto tryAgain;
+                            }
+                        }
+
+                        if (x > 120 && x < (120+110) && y > 300 && y < (300+40)) graphics.renderTexture(Continue_click, 120, 300);
+                        else graphics.renderTexture(Continue, 120, 300);
+                        if (x > 180 && x < (180+110) && y > 370 && y < (370+40)) graphics.renderTexture(Exit_click, 180, 370);
+                        else graphics.renderTexture(Exit, 180, 370);
+                        if (x > 60 && x < (60+110) && y > 370 && y < (370+40)) graphics.renderTexture(playAgain_click, 60, 370);
+                        else graphics.renderTexture(playAgain, 60, 370);
+                        graphics.presentScene();
                     }
                     graphics.renderTexture(pause, 20 , 20 );
             }
@@ -262,9 +289,9 @@ int main(int argc, char *argv[])
                 graphics.play(gOver);
                 graphics.renderTexture(gameOver, 50, 150);
                 SDL_Texture* GradeMin = graphics.renderText(vers(Count), fontMin, color1);
-                graphics.renderTexture(GradeMin, 247 , 262 );
+                graphics.renderTexture(GradeMin, 244 , 262 );
                 SDL_Texture* MaxScore = graphics.renderText(vers(maxScore), fontMin, color1);
-                graphics.renderTexture(MaxScore, 247 , 311);
+                graphics.renderTexture(MaxScore, 244 , 311);
                 if (Count <= 20) graphics.renderTexture(silver, 75 , 270);
                 else {
                     if (Count <= 40) graphics.renderTexture(honor, 75 , 270);

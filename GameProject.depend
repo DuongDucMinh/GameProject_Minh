@@ -1,14 +1,14 @@
 # depslib dependency file v1.0
-1714931560 source:d:\c++\gameproject\column.cpp
+1714986394 source:d:\c++\gameproject\column.cpp
 	"column.h"
 	"graphics.h"
 	<queue>
 
-1714931560 d:\c++\gameproject\column.h
+1714970744 d:\c++\gameproject\column.h
 	<queue>
 	<SDL.h>
 
-1714933113 d:\c++\gameproject\graphics.h
+1714994410 d:\c++\gameproject\graphics.h
 	<vector>
 	<string.h>
 	<SDL.h>
@@ -17,7 +17,7 @@
 	<SDL_ttf.h>
 	"def.h"
 
-1714935966 d:\c++\gameproject\def.h
+1714985233 d:\c++\gameproject\def.h
 
 1714461676 source:d:\c++\gameproject\collition.cpp
 	"Collition.h"
@@ -25,7 +25,7 @@
 1714461676 d:\c++\gameproject\collition.h
 	<SDL.h>
 
-1714963231 source:d:\c++\gameproject\main.cpp
+1714997578 source:d:\c++\gameproject\main.cpp
 	<bits/stdc++.h>
 	<cstdlib>
 	<ctime>
