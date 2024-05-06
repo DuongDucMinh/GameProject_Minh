@@ -63,20 +63,6 @@ struct Mouse {
 
 };
 
-//void render(const Mouse& mouse, SDL_Texture* spongeBob, const Graphics& graphics) {
-    /*SDL_Rect filled_rect;
-    filled_rect.x = mouse.x;
-    filled_rect.y = mouse.y;
-    filled_rect.w = 80;
-    filled_rect.h = 80;
-    SDL_SetRenderDrawColor(graphics.renderer, 100, 0, 100, 255); // mau xanh
-    SDL_RenderFillRect(graphics.renderer, &filled_rect);
-    */
-/*
-    SDL_Rect characterRect = { mouse.x, mouse.y, 57, 42 }; // Kích thước của nhân vật, có thể điều chỉnh
-    SDL_RenderCopy(graphics.renderer, spongeBob, NULL, &characterRect);
-}*/
-
 bool gameOver1(const Mouse& mouse) {
     return mouse.rect.x < 0 || mouse.rect.x >= SCREEN_WIDTH ||
            mouse.rect.y < 0 || mouse.rect.y >= SCREEN_HEIGHT - 130;

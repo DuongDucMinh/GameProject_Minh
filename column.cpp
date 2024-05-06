@@ -21,6 +21,16 @@ void Column::update() {
     destRect2.x -= 2;
 }
 
+void Column::update_up() {
+    destRect1.y -= 2;
+    destRect2.y -= 2;
+}
+
+void Column::update_down() {
+    destRect1.y += 2;
+    destRect2.y += 2;
+}
+
 void Column::render() {
     SDL_RenderCopy(Graphics::renderer, Graphics::col1, NULL, &destRect1);
     SDL_RenderCopy(Graphics::renderer, Graphics::col2, NULL, &destRect2);
@@ -29,3 +39,4 @@ void Column::render() {
 bool Column::grade() {
     return destRect1.x == 114-50;
 }
+

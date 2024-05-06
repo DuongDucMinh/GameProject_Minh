@@ -1,6 +1,7 @@
 #ifndef _GRAPHICS__H
 #define _GRAPHICS__H
 
+#include <vector>
 #include <string.h>
 #include <SDL.h>
 #include <SDL_image.h>

@@ -1,4 +1,4 @@
-#include <queue>
+#include <bits/stdc++.h>
 #include <cstdlib> // for rand() and srand()
 #include <ctime>   // for time()
 #include <iostream>
@@ -16,7 +16,7 @@ SDL_Renderer* Graphics::renderer = nullptr;
 SDL_Texture* Graphics::col1 = nullptr;
 SDL_Texture* Graphics::col2 = nullptr;
 
-std::queue<Column*> nyc;
+//deque<Column*> nyc;
 
 using namespace std;
 
@@ -41,6 +41,8 @@ int main(int argc, char *argv[])
     Graphics graphics;
     graphics.init();
 
+    deque<Column*> nyc;
+
     // KHỞI TẠO TIẾNG KÊU KHI NHẢY
     Mix_Chunk *gJump = graphics.loadSound("sound\\flappy_whoosh.mp3");
 
@@ -49,7 +51,6 @@ int main(int argc, char *argv[])
 
     // KHỞI TẠO ÂM THANH KHI THUA
     Mix_Chunk *gOver = graphics.loadSound("sound\\sound_gameover.mp3");
-
 
     // KHỞI TẠO HẠT GIỐNG NGẪU NHIÊN
     srand(time(NULL));
@@ -71,6 +72,7 @@ int main(int argc, char *argv[])
     SDL_Texture* gold = graphics.loadTexture("picture\\gold.png");
     SDL_Texture* pause = graphics.loadTexture("picture\\pause.png");
     SDL_Texture* unpause= graphics.loadTexture("picture\\resume.png");
+    SDL_Texture* heart = graphics.loadTexture("picture\\heart.png");
 
     // KHAI BÁO KHỞI TẠO NỀN TRÔI
     ScrollingBackground background_wait;
@@ -100,10 +102,10 @@ int main(int argc, char *argv[])
 
     tryAgain:
 
-    // KHỞI TẠO VỊ TRÍ BAN ĐẦU CON CHIM HIỆN RA
+    // KHỞI TẠO VỊ TRÍ CON CHIM
     Mouse mouse(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
 
-    //test wait
+    // MÀN HÌNH CHỜ
     bool quit = false;
     SDL_Event event;
     int x, y;
@@ -133,21 +135,12 @@ int main(int argc, char *argv[])
         SDL_Delay(17);
     }
 
-    long Count = 0, dem = 0;
+    long Count = 0, dem = 0, die_count = 3;
+    bool test = true;
 
     quit = false;
 
     while (!quit ) {
-        //SDL_GetMouseState(&x, &y);
-        SDL_PollEvent(&event);
-        switch (event.type) {
-            case SDL_QUIT:
-                 exit(0);
-                 break;
-            case SDL_MOUSEBUTTONDOWN:
-                 if (x > 20 && x < (20+32) && y > 20 && y < (20+34)) quit = true;
-                 break;
-        }
 
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 
@@ -173,20 +166,26 @@ int main(int argc, char *argv[])
                 colu = new Column();
                 colu->destRect1.y = rand() % 165 - 260;
                 colu->destRect2.y = colu->destRect1.y + 500;
-                nyc.push(colu);
+                nyc.push_back(colu);
                 startTime = currentTime;
             }
 
             while (!nyc.empty()) {
                 nyc.front()->update();
-                if (mouse.touch(nyc.front())) {
-                        quit = true; //if (gameOver2(mouse, )) quit = true;
+                if (nyc.front()->destRect1.y >= -260 && nyc.front()->destRect1.y <= -94) {nyc.front()->update_up();
+                        if (nyc.front()->destRect1.y == -94) nyc.front()->update_down();
+                }
+                if (mouse.touch(nyc.front()) && test) {
+                    test = false;
+                    die_count--;
+                    if (die_count == 0) quit = true; //if (gameOver2(mouse, )) quit = true;
                 }
 
                 nyc.front()->render();
 
                 if (nyc.front()->destRect1.x + COLUMN_WIDTH < 0) {
-                    nyc.pop();
+                    nyc.pop_front();
+                    test = true;
                 } else {
                     break;
                 }
@@ -195,6 +194,7 @@ int main(int argc, char *argv[])
             if (nyc.front()->grade()) {
                 graphics.play(fpass);
                 Count++;
+
                 if (Count >= maxScore) maxScore = Count;
             }
         }
@@ -205,7 +205,12 @@ int main(int argc, char *argv[])
 
         // TẠO ĐIỂM
         SDL_Texture* Grade = graphics.renderText(vers(Count), font, color);
-        graphics.renderTexture(Grade, 170 , 21 );
+        graphics.renderTexture(Grade, 170 , 17 );
+
+        // TẠO TIM
+        for (int i = 1; i <= die_count; i++) {
+            graphics.renderTexture( heart , 340 - 30*i , 24);
+        }
 
         // TẠO CON CHIM
         flappy_bird.tick();
@@ -214,6 +219,27 @@ int main(int argc, char *argv[])
         // TẠO PAUSE
         graphics.renderTexture(pause, 20 , 20 );
 
+        // KHI ẤN PAUSE
+        SDL_PollEvent(&event);
+        SDL_GetMouseState(&x, &y);
+        if (event.type == SDL_QUIT) exit(0);
+        else {
+            if (event.type == SDL_MOUSEBUTTONDOWN && x > 20 && x < 52 && y > 20 && y < 54) {
+                    graphics.renderTexture(unpause, 20 , 20 );
+                    graphics.presentScene();
+                    while (true) {
+                         SDL_Event e;
+                         SDL_PollEvent(&e);
+                         SDL_GetMouseState(&x, &y);
+                         if ( e.type == SDL_QUIT ) exit(0);
+                         if (x > 20 && x < 52 && y > 20 && y < 54 && e.type == SDL_MOUSEBUTTONDOWN) {
+                            SDL_Delay(100);
+                            break;
+                         }
+                    }
+                    graphics.renderTexture(pause, 20 , 20 );
+            }
+        }
 
         // HIỆU ỨNG KHI CHIM CHẠM ĐẤT || CỘT
         if (gameOver1(mouse)) quit = true;
@@ -223,7 +249,7 @@ int main(int argc, char *argv[])
                         graphics.render_back(background);
                         nyc.front()->render();
                         graphics.render_back_land(land);
-                        graphics.renderTexture(Grade, 170 , 21 );
+                        graphics.renderTexture(Grade, 170 , 17 );
 
                         mouse.turnSouth();
                         mouse.move();
@@ -251,10 +277,11 @@ int main(int argc, char *argv[])
                 while (!quit1) {
                     SDL_GetMouseState(&x, &y);
                     SDL_PollEvent(&event);
+                    if (event.type == SDL_QUIT ) exit(0);
                     if (event.type == SDL_MOUSEBUTTONDOWN) {
                         if (x > 180 && x < (180+110) && y > 370 && y < (370+40)) quit1 = true;
                         if (x > 60 && x < (60+110) && y > 370 && y < (370+40)) {
-                                nyc.pop();
+                                nyc.pop_front();
                                 goto tryAgain;
                         }
                     }
