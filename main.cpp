@@ -117,8 +117,8 @@ int main(int argc, char *argv[])
     // KHỞI TẠO VỊ TRÍ CON CHIM
     Mouse mouse(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
     Mouse quai1(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 180) + 60);
-    Mouse Saw(SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 180) + 60);
-    Mouse Banana(SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 180) + 60);
+    Mouse Saw(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 180) + 60);
+    Mouse Banana(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 180) + 60);
     Mouse Collect(a, b);
 
     // MÀN HÌNH CHỜ
@@ -210,7 +210,6 @@ int main(int argc, char *argv[])
                 if (nyc.front()->destRect1.x + COLUMN_WIDTH < 0) {
                     nyc.pop_front();
                     test = true;
-                    test4 = true;
                     test3 = rand() % 2;
                 } else {
                     break;
@@ -239,33 +238,9 @@ int main(int argc, char *argv[])
         }
 
         // TẠO QUÁI
-        if (Count > 2) {
-            flappy_blue_bird.tick();
-            graphics.render( quai1.rect.x , quai1.rect.y , flappy_blue_bird);
-            saw.tick();
-            graphics.render( Saw.rect.x , Saw.rect.y , saw);
-            bananas.tick();
-            graphics.render( Banana.rect.x , Banana.rect.y , bananas);
-            quai1.turnWest_quai();
-            Saw.turnWest_nor();
-            Banana.turnWest_nor();
-            quai1.move();
-            Saw.move();
-            Banana.move();
-            if (quai1.rect.x < -44) {
-                quai1.rect.x = SCREEN_WIDTH + 20;
-                quai1.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
-            }
-            if (Saw.rect.x < -44) {
-                Saw.rect.x = SCREEN_WIDTH + 20;
-                Saw.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
-            }
-            if (Banana.rect.x < -44) {
-                Banana.rect.x = SCREEN_WIDTH + 20;
-                Banana.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
-            }
-
-        }
+        comeBack2(Count, graphics, flappy_blue_bird, quai1, test4);
+        comeBack (Count, graphics, saw, Saw);
+        comeBack (Count, graphics, bananas, Banana);
 
         // TẠO CON CHIM
         flappy_bird.tick();

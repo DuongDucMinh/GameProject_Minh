@@ -88,15 +88,29 @@ bool gameOver2(const Mouse& mouse, const Column* colum) {
     return Collision::Collised(mouse.rect, colum->destRect1) || Collision::Collised(mouse.rect , colum->destRect2) ;
 }
 
-void comeBack(int Count,const Sprite object, const Mouse& mouse) {
-    if (Count > 2) {
+void comeBack(int Count, Graphics graphics, Sprite& object, Mouse& mouse) {
+    if (Count > 10) {
         object.tick();
         graphics.render( mouse.rect.x , mouse.rect.y , object);
         mouse.turnWest_nor();
         mouse.move();
         if (mouse.rect.x < -44) {
-                mouse.rect.x = SCREEN_WIDTH + 20;
-                mouse.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
+            mouse.rect.x = rand() % SCREEN_WIDTH + SCREEN_WIDTH;
+            mouse.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
+        }
+    }
+}
+
+void comeBack2(int Count, Graphics graphics, Sprite& object, Mouse& mouse, bool& test4) {
+    if (Count > 20) {
+        object.tick();
+        graphics.render( mouse.rect.x , mouse.rect.y , object);
+        mouse.turnWest_quai();
+        mouse.move();
+        if (mouse.rect.x < -44) {
+            test4 = true;
+            mouse.rect.x = SCREEN_WIDTH + 20;
+            mouse.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
         }
     }
 }
