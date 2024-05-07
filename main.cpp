@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
     SDL_Texture* unpause= graphics.loadTexture("picture\\resume.png");
     SDL_Texture* heart = graphics.loadTexture("picture\\heart.png");
 
+
     // KHAI BÁO KHỞI TẠO NỀN TRÔI
     ScrollingBackground background_wait;
     ScrollingBackground background;
@@ -85,14 +86,22 @@ int main(int argc, char *argv[])
     Graphics::col2 = graphics.loadTexture("picture\\pipe_down.jpg");
     Uint32 startTime = SDL_GetTicks();
 
-    // KHAI BÁO CON CHIM
+    // KHAI BÁO CON CHIM VÀ QUÁI
     Sprite flappy_bird;
     SDL_Texture* FL_Bird_Texture = graphics.loadTexture("picture\\bird.png");
     flappy_bird.init(FL_Bird_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
-
     Sprite flappy_blue_bird;
     SDL_Texture* FL_BLUE_BiRD_Texture = graphics.loadTexture("picture\\blue_bird.png");
     flappy_blue_bird.init(FL_BLUE_BiRD_Texture, FL_BLUE_BIRD_FRAMES, FL_BLUE_BIRD_CLIPS);
+    Sprite saw;
+    SDL_Texture* SAW_Texture = graphics.loadTexture("picture\\saw.png");
+    saw.init(SAW_Texture, SAW_FRAMES, SAW_CLIPS);
+    Sprite bananas;
+    SDL_Texture* BANANAS_Texture = graphics.loadTexture("picture\\Bananas.png");
+    bananas.init(BANANAS_Texture, BANANAS_FRAMES, BANANAS_CLIPS);
+    Sprite Collected;
+    SDL_Texture* COLLECTED_Texture = graphics.loadTexture("picture\\Collected.png");
+    Collected.init(COLLECTED_Texture, COLLECTED_FRAMES, COLLECTED_CLIPS);
 
     // KHAI BÁO CHỮ
     TTF_Font* font = graphics.loadFont("Gameplay Regular.ttf", 35);
@@ -101,11 +110,16 @@ int main(int argc, char *argv[])
     SDL_Color color1 = {125, 125, 125, 0};
 
     long maxScore = 0;
+    int a, b;
 
     tryAgain:
 
     // KHỞI TẠO VỊ TRÍ CON CHIM
     Mouse mouse(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
+    Mouse quai1(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 180) + 60);
+    Mouse Saw(SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 180) + 60);
+    Mouse Banana(SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 180) + 60);
+    Mouse Collect(a, b);
 
     // MÀN HÌNH CHỜ
     bool quit = false;
@@ -138,7 +152,7 @@ int main(int argc, char *argv[])
     }
 
     long Count = 0, dem = 0, die_count = 3, v = 1;
-    bool test = true, test2 = true, test3 = true;
+    bool test = true, test2 = true, test3 = true, test4 = true;
 
     quit = false;
 
@@ -181,6 +195,7 @@ int main(int argc, char *argv[])
                     nyc.front()->update_down( v, Count, test2);
                 }
 
+                // CHIM VA CỘT
                 if (mouse.touch(nyc.front()) ) {
                     graphics.play(touch);
                     if (test) {
@@ -195,6 +210,7 @@ int main(int argc, char *argv[])
                 if (nyc.front()->destRect1.x + COLUMN_WIDTH < 0) {
                     nyc.pop_front();
                     test = true;
+                    test4 = true;
                     test3 = rand() % 2;
                 } else {
                     break;
@@ -220,6 +236,35 @@ int main(int argc, char *argv[])
         // TẠO TIM
         for (int i = 1; i <= die_count; i++) {
             graphics.renderTexture( heart , 340 - 30*i , 24);
+        }
+
+        // TẠO QUÁI
+        if (Count > 2) {
+            flappy_blue_bird.tick();
+            graphics.render( quai1.rect.x , quai1.rect.y , flappy_blue_bird);
+            saw.tick();
+            graphics.render( Saw.rect.x , Saw.rect.y , saw);
+            bananas.tick();
+            graphics.render( Banana.rect.x , Banana.rect.y , bananas);
+            quai1.turnWest_quai();
+            Saw.turnWest_nor();
+            Banana.turnWest_nor();
+            quai1.move();
+            Saw.move();
+            Banana.move();
+            if (quai1.rect.x < -44) {
+                quai1.rect.x = SCREEN_WIDTH + 20;
+                quai1.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
+            }
+            if (Saw.rect.x < -44) {
+                Saw.rect.x = SCREEN_WIDTH + 20;
+                Saw.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
+            }
+            if (Banana.rect.x < -44) {
+                Banana.rect.x = SCREEN_WIDTH + 20;
+                Banana.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
+            }
+
         }
 
         // TẠO CON CHIM
@@ -268,7 +313,15 @@ int main(int argc, char *argv[])
             }
         }
 
-        // HIỆU ỨNG KHI CHIM CHẠM ĐẤT || CỘT
+        // KHI CHIM CHẠM ĐẤT || CỘT || QUÁI
+        if (mouse.touch_ug(quai1)) {
+            graphics.play(touch);
+            if (test4) {
+                test4 = false;
+                die_count--;
+                if (die_count == 0) quit = true;
+            }
+        }
         if (gameOver1(mouse)) quit = true;
         if (quit == true ) {
                 if (!gameOver1(mouse)) {
@@ -277,6 +330,7 @@ int main(int argc, char *argv[])
                         nyc.front()->render();
                         graphics.render_back_land(land);
                         graphics.renderTexture(Grade, 170 , 17 );
+                        graphics.render( quai1.rect.x , quai1.rect.y , flappy_blue_bird);
 
                         mouse.turnSouth();
                         mouse.move();
@@ -328,7 +382,6 @@ int main(int argc, char *argv[])
         }
         if (dem < 50) dem++;
     }
-
 
     //if (gMusic != nullptr) Mix_FreeMusic( gMusic );
     if (gJump != nullptr) Mix_FreeChunk(gJump);

@@ -2,11 +2,15 @@
 #define GAME_H
 
 #include <SDL.h>
+#include <cstdlib> // for rand() and srand()
+#include <ctime>
 #include "graphics.h"
 #include "column.h"
 #include "Collition.h"
 
 #define INITIAL_SPEED 0.3
+#define INITIAL_SPEED_1 2
+#define INITIAL_SPEED_2 4
 
 bool inside(int x, int y, SDL_Rect r) {
     return x > r.x && x < r.x+r.w && y > r.y && y < r.y+r.h;
@@ -19,9 +23,10 @@ bool overlap(const SDL_Rect& r1, const SDL_Rect& r2) {
 
 struct Mouse {
     SDL_Rect rect;
-    //int x, y;
     double dx = 0, dy = 0;
     double speed = INITIAL_SPEED;
+    double speed1 = INITIAL_SPEED_1;
+    double speed2 = INITIAL_SPEED_2;
 
     Mouse(int x, int y) {
         rect.x = x;
@@ -32,6 +37,10 @@ struct Mouse {
 
     bool touch(const Column* colum) {
         return overlap(rect, colum->destRect1) || overlap(rect, colum->destRect2);
+    }
+
+    bool touch_ug(const Mouse mouse) {
+        return overlap(rect, mouse.rect);
     }
 
     void move() {
@@ -45,7 +54,6 @@ struct Mouse {
     void turnSouth() {
         dy += speed ;
         dx = 0;
-
     }
     void turnWest() {
         dy = 0;
@@ -60,6 +68,14 @@ struct Mouse {
         dy = -speed * 8 ;
         dx = 0;
     }
+    void turnWest_quai() {
+        dy = 0;
+        dx = -speed2;
+    }
+    void turnWest_nor() {
+        dy = 0;
+        dx = -speed1;
+    }
 
 };
 
@@ -72,6 +88,18 @@ bool gameOver2(const Mouse& mouse, const Column* colum) {
     return Collision::Collised(mouse.rect, colum->destRect1) || Collision::Collised(mouse.rect , colum->destRect2) ;
 }
 
+void comeBack(int Count,const Sprite object, const Mouse& mouse) {
+    if (Count > 2) {
+        object.tick();
+        graphics.render( mouse.rect.x , mouse.rect.y , object);
+        mouse.turnWest_nor();
+        mouse.move();
+        if (mouse.rect.x < -44) {
+                mouse.rect.x = SCREEN_WIDTH + 20;
+                mouse.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
+        }
+    }
+}
 
 #endif // GAME_H
 
