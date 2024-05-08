@@ -6,7 +6,7 @@ const int SCREEN_WIDTH = 350; // 800 350
 const int SCREEN_HEIGHT = 570; // 600 480
 //const char* WINDOW_TITLE = "FLAPPY BIRD GAME!";
 const int COLUMN_WIDTH = 65;
-const int delayTime = 2000;
+const int delayTime = 5000;
 
 const int FL_BIRD_CLIPS[][4] = {
     {  0, 0, 60, 42},

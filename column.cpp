@@ -22,8 +22,8 @@ void Column::update() {
 }
 
 void Column::update_up(long& v, long Count, bool& test2) {
-    if (Count > 20) {
-        if (Count == 10*v) v++;
+    if (Count > 10) {
+        //if (Count % 10 == 0) v++;
         if (destRect1.y >= -260 && test2) {
             destRect1.y -= v;
             destRect2.y -= v;
@@ -39,8 +39,8 @@ void Column::update_up(long& v, long Count, bool& test2) {
 }
 
 void Column::update_down(long& v, long Count, bool& test2) {
-    if (Count > 20) {
-        if (Count == 10*v) v++;
+    if (Count > 10) {
+        //if (Count % 10 == 0) v++;
         if (destRect1.y <= -95 && test2) {
             destRect1.y += v;
             destRect2.y += v;

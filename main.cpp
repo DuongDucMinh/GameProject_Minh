@@ -41,8 +41,6 @@ int main(int argc, char *argv[])
     Graphics graphics;
     graphics.init();
 
-    deque<Column*> nyc;
-
     // KHỞI TẠO ÂM THANH
     Mix_Chunk *gJump = graphics.loadSound("sound\\flappy_whoosh.mp3");
     Mix_Chunk *fpass = graphics.loadSound("sound\\sound_ting.mp3");
@@ -82,6 +80,8 @@ int main(int argc, char *argv[])
 
     // KHAI BÁO CÁI CỘT
     Column* colu = new Column();
+    colu->destRect1.y = rand() % 165 - 260;
+    colu->destRect2.y = colu->destRect1.y + 500;
     Graphics::col1 = graphics.loadTexture("picture\\pipe_up.png");
     Graphics::col2 = graphics.loadTexture("picture\\pipe_down.jpg");
     Uint32 startTime = SDL_GetTicks();
@@ -116,9 +116,9 @@ int main(int argc, char *argv[])
 
     // KHỞI TẠO VỊ TRÍ CON CHIM
     Mouse mouse(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
-    Mouse quai1(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 180) + 60);
-    Mouse Saw(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 180) + 60);
-    Mouse Banana(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 180) + 60);
+    Mouse quai1(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 200) + 80);
+    Mouse Saw(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 200) + 80);
+    Mouse Banana(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 200) + 80);
     Mouse Collect(a, b);
 
     // MÀN HÌNH CHỜ
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
     }
 
     long Count = 0, dem = 0, die_count = 3, v = 1;
-    bool test = true, test2 = true, test3 = true, test4 = true;
+    bool test_column = true , test_rand = true, test2 = true, test_quai1 = true, test_saw = true;
 
     quit = false;
 
@@ -176,52 +176,24 @@ int main(int argc, char *argv[])
 
         // TẠO CỘT
         if (dem >= 50) {
-            Uint32 currentTime = SDL_GetTicks();
-            Uint32 elapsedTime = currentTime - startTime;
-            if (elapsedTime > delayTime) {
-                colu = new Column();
-                colu->destRect1.y = rand() % 165 - 260;
-                colu->destRect2.y = colu->destRect1.y + 500;
-                nyc.push_back(colu);
-                startTime = currentTime;
+            comeBack_column(Count, graphics, colu, v, test2, test_rand, test_column);
+
+            // CHIM VA CỘT
+            if (mouse.touch(colu) ) {
+                graphics.play(touch);
+                if (test_column) {
+                    test_column = false;
+                    die_count--;
+                    if (die_count == 0) quit = true; //if (gameOver2(mouse, )) quit = true;
+                }
             }
 
-            while (!nyc.empty()) {
-                nyc.front()->update();
-
-                if (test3) {
-                    nyc.front()->update_up( v, Count, test2);
-                } else {
-                    nyc.front()->update_down( v, Count, test2);
-                }
-
-                // CHIM VA CỘT
-                if (mouse.touch(nyc.front()) ) {
-                    graphics.play(touch);
-                    if (test) {
-                        test = false;
-                        die_count--;
-                        if (die_count == 0) quit = true; //if (gameOver2(mouse, )) quit = true;
-                    }
-                }
-
-                nyc.front()->render();
-
-                if (nyc.front()->destRect1.x + COLUMN_WIDTH < 0) {
-                    nyc.pop_front();
-                    test = true;
-                    test3 = rand() % 2;
-                } else {
-                    break;
-                }
-
+            // VƯỢT CỘT
+            if (colu->grade()) {
+                    graphics.play(fpass);
+                    Count++;
+                    if (Count >= maxScore) maxScore = Count;
             }
-            if (nyc.front()->grade()) {
-                graphics.play(fpass);
-                Count++;
-                if (Count >= maxScore) maxScore = Count;
-            }
-
         }
 
         // TẠO LAND
@@ -238,9 +210,11 @@ int main(int argc, char *argv[])
         }
 
         // TẠO QUÁI
-        comeBack2(Count, graphics, flappy_blue_bird, quai1, test4);
-        comeBack (Count, graphics, saw, Saw);
-        comeBack (Count, graphics, bananas, Banana);
+        comeBack2(Count, graphics, flappy_blue_bird, quai1, test_quai1);
+        comeBack (Count, graphics, saw, Saw, colu, test_saw);
+
+        // TẠO QUẢ
+        //comeBack1(Count, graphics, bananas, Banana, colu);
 
         // TẠO CON CHIM
         flappy_bird.tick();
@@ -271,7 +245,7 @@ int main(int argc, char *argv[])
                             }
                             if (x > 180 && x < (180+110) && y > 370 && y < (370+40)) exit(0);
                             if (x > 60 && x < (60+110) && y > 370 && y < (370+40)) {
-                                    nyc.pop_front();
+                                    //***
                                     goto tryAgain;
                             }
                         }
@@ -288,11 +262,35 @@ int main(int argc, char *argv[])
             }
         }
 
+
+        // KHI CHIM ĂN QUẢ
+        /*if (mouse.touch_ug(Banana)) {
+            graphics.play(fpass);
+            Collected.tick();
+            graphics.render( Banana.rect.x , Banana.rect.y , Collected);
+            if (Collected.currentFrame == 5) {
+                Banana.rect.x  = -45;
+                Collect.rect.x = -10;
+                Collect.rect.y = -10;
+                if (die_count < 3) {
+                    die_count++;
+                }
+            }
+        }*/
+
         // KHI CHIM CHẠM ĐẤT || CỘT || QUÁI
         if (mouse.touch_ug(quai1)) {
             graphics.play(touch);
-            if (test4) {
-                test4 = false;
+            if (test_quai1) {
+                test_quai1 = false;
+                die_count--;
+                if (die_count == 0) quit = true;
+            }
+        }
+        if (mouse.touch_ug(Saw)) {
+            graphics.play(touch);
+            if (test_saw) {
+                test_saw = false;
                 die_count--;
                 if (die_count == 0) quit = true;
             }
@@ -302,10 +300,12 @@ int main(int argc, char *argv[])
                 if (!gameOver1(mouse)) {
                     while (mouse.rect.y < 440) {
                         graphics.render_back(background);
-                        nyc.front()->render();
+                        colu->render();
                         graphics.render_back_land(land);
                         graphics.renderTexture(Grade, 170 , 17 );
                         graphics.render( quai1.rect.x , quai1.rect.y , flappy_blue_bird);
+                        graphics.render( Saw.rect.x, Saw.rect.y, saw);
+                        graphics.render( Banana.rect.x, Banana.rect.y, bananas);
 
                         mouse.turnSouth();
                         mouse.move();
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
                     if (event.type == SDL_MOUSEBUTTONDOWN) {
                         if (x > 180 && x < (180+110) && y > 370 && y < (370+40)) quit1 = true;
                         if (x > 60 && x < (60+110) && y > 370 && y < (370+40)) {
-                                nyc.pop_front();
+                                //****
                                 goto tryAgain;
                         }
                     }

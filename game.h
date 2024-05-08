@@ -5,6 +5,7 @@
 #include <cstdlib> // for rand() and srand()
 #include <ctime>
 #include "graphics.h"
+#include "def.h"
 #include "column.h"
 #include "Collition.h"
 
@@ -88,19 +89,60 @@ bool gameOver2(const Mouse& mouse, const Column* colum) {
     return Collision::Collised(mouse.rect, colum->destRect1) || Collision::Collised(mouse.rect , colum->destRect2) ;
 }
 
-void comeBack(int Count, Graphics graphics, Sprite& object, Mouse& mouse) {
-    if (Count > 10) {
+// Saw
+void comeBack(int Count, Graphics graphics, Sprite& object, Mouse& mouse, Column* colum, bool& test5) {
+    bool test = rand() % 2;
+    if (Count > 2) {
+        object.tick();
+        graphics.render( mouse.rect.x , mouse.rect.y , object);
+        mouse.turnWest_nor();
+        mouse.move();
+        if (mouse.rect.x < -44) {
+            test5 = true;
+            mouse.rect.x = rand() % SCREEN_WIDTH + SCREEN_WIDTH;
+            if (test) mouse.rect.y = rand() % (380 - colum->destRect2.y) + colum->destRect2.y;
+            else mouse.rect.y = rand() % (colum->destRect2.y - 187) + 60 ;
+        }
+    }
+}
+
+void comeBack_column(int Count, Graphics graphics, Column*& colum, long& v, bool& test2, bool& test_rand, bool& test_colum) {
+    if (Count > 10){
+        if (test_rand) {
+            colum->update_up( v, Count, test2);
+        } else {
+            colum->update_down( v, Count, test2);
+        }
+    }
+    colum->render();
+    colum->update();
+    if (colum->destRect1.x + COLUMN_WIDTH < 0) {
+            test_colum = true;
+            test_rand = rand() % 2;
+            colum = new Column();
+            colum->destRect1.y = rand() % 165 - 260;
+            colum->destRect2.y = colum->destRect1.y + 500;
+    }
+}
+
+
+// Banana
+void comeBack1(int Count, Graphics graphics, Sprite& object, Mouse& mouse, Column* colum) {
+    bool test = rand() % 2;
+    if (Count > 2) {
         object.tick();
         graphics.render( mouse.rect.x , mouse.rect.y , object);
         mouse.turnWest_nor();
         mouse.move();
         if (mouse.rect.x < -44) {
             mouse.rect.x = rand() % SCREEN_WIDTH + SCREEN_WIDTH;
-            mouse.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
+            if (test) mouse.rect.y = rand() % (380 - colum->destRect2.y) + colum->destRect2.y;
+            else mouse.rect.y = rand() % (colum->destRect2.y - 127) ;
         }
     }
 }
 
+// Quai1
 void comeBack2(int Count, Graphics graphics, Sprite& object, Mouse& mouse, bool& test4) {
     if (Count > 20) {
         object.tick();
@@ -110,7 +152,7 @@ void comeBack2(int Count, Graphics graphics, Sprite& object, Mouse& mouse, bool&
         if (mouse.rect.x < -44) {
             test4 = true;
             mouse.rect.x = SCREEN_WIDTH + 20;
-            mouse.rect.y = rand() % (SCREEN_HEIGHT - 180) + 60;
+            mouse.rect.y = rand() % (SCREEN_HEIGHT - 200) + 80;
         }
     }
 }
