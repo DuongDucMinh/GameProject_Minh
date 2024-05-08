@@ -122,34 +122,11 @@ int main(int argc, char *argv[])
     Mouse Collect(a, b);
 
     // MÀN HÌNH CHỜ
+    wait_screen(graphics, background_wait, land, start_fb, flappy_bird, replay, replay_click);
+
     bool quit = false;
     SDL_Event event;
     int x, y;
-    while (!quit) {
-        SDL_GetMouseState(&x, &y);
-        SDL_PollEvent(&event);
-        switch (event.type) {
-            case SDL_QUIT:
-                 exit(0);
-                 break;
-            case SDL_MOUSEBUTTONDOWN:
-                 if (x > 125 && x < 225 && y > 300 && y < 356) quit = true;
-                 break;
-        }
-
-        background_wait.scroll(2);
-        graphics.render_back(background_wait);
-        land.scroll(2);
-        graphics.render_back_land(land);
-        graphics.renderTexture(start_fb, 0, 100);
-        if (x > 125 && x < 225 && y > 300 && y < 356) graphics.renderTexture(replay_click, 125, 300);
-        else graphics.renderTexture(replay, 125, 300);
-        flappy_bird.tick();
-        graphics.render( 145 , 230 , flappy_bird);
-
-        graphics.presentScene();
-        SDL_Delay(17);
-    }
 
     long Count = 0, dem = 0, die_count = 3, v = 1;
     bool test_column = true , test_rand = true, test2 = true, test_quai1 = true, test_saw = true;

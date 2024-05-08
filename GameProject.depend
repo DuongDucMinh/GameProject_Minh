@@ -25,7 +25,7 @@
 1714461676 d:\c++\gameproject\collition.h
 	<SDL.h>
 
-1715160923 source:d:\c++\gameproject\main.cpp
+1715162213 source:d:\c++\gameproject\main.cpp
 	<bits/stdc++.h>
 	<cstdlib>
 	<ctime>
@@ -40,7 +40,7 @@
 	"Collition.h"
 	"menu.h"
 
-1715160923 d:\c++\gameproject\game.h
+1715162213 d:\c++\gameproject\game.h
 	<SDL.h>
 	<cstdlib>
 	<ctime>
@@ -51,9 +51,10 @@
 
 1714611302 d:\c++\gameproject\declare.h
 
-1714631184 d:\c++\gameproject\menu.h
+1715162632 d:\c++\gameproject\menu.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
 	"graphics.h"
+	"def.h"
 
