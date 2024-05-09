@@ -7,6 +7,7 @@
 #define INITIAL_SPEED_2 4
 #define INITIAL_SPEED_BIRD 3.5
 #define BLUE_BIRD_SPEED 3
+#define DOI_SPEED 4
 #define SAW_SPEED 2
 #define HEART 3
 
@@ -37,6 +38,17 @@ const int FL_BLUE_BIRD_CLIPS[][4] = {
     {132,84, 44, 42},
 };
 const int FL_BLUE_BIRD_FRAMES = sizeof(FL_BLUE_BIRD_CLIPS)/sizeof(int)/4;
+
+const int BAT_CLIPS[][4] = {
+    {  0, 0, 46, 30},
+    { 46, 0, 46, 30},
+    { 92, 0, 46, 30},
+    {138, 0, 46, 30},
+    {184, 0, 46, 30},
+    {230, 0, 46, 30},
+    {276, 0, 46, 30},
+};
+const int BAT_FRAMES = sizeof(BAT_CLIPS)/sizeof(int)/4;
 
 const int SAW_CLIPS[][4] = {
     {  0, 0, 38, 38},

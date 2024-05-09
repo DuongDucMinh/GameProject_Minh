@@ -7,7 +7,7 @@
 
 #define COLUMN_SPEED 2
 #define COLUMN_SPEED_Y 1
-#define COLUMN_SPACE 130
+#define COLUMN_SPACE 125
 
 class Column {
 public:

@@ -94,16 +94,16 @@ struct Menu {
 
             renderTexture(start_fb, 0, 100, renderer);
 
-            renderTexture(volume_on, SCREEN_WIDTH - 80 , 30 , renderer );
+            renderTexture(volume_on, SCREEN_WIDTH - 80 , 40 , renderer );
 
-            if (event.type == SDL_MOUSEBUTTONDOWN && x > (SCREEN_WIDTH - 80) && x < (SCREEN_WIDTH - 30) && y > 30 && y < 80) volume = (volume + 1)%2;
+            if (event.type == SDL_MOUSEBUTTONDOWN && x > (SCREEN_WIDTH - 80) && x < (SCREEN_WIDTH - 40) && y > 40 && y < 80) volume = (volume + 1)%2;
 
             if (volume) {
                 Mix_VolumeMusic(128);
-                renderTexture( volume_on, SCREEN_WIDTH - 80 , 30 , renderer);
+                renderTexture( volume_on, SCREEN_WIDTH - 80 , 40 , renderer);
             } else {
                 Mix_VolumeMusic(0);
-                renderTexture (volume_off, SCREEN_WIDTH - 80 , 30 , renderer );
+                renderTexture (volume_off, SCREEN_WIDTH - 80 , 40 , renderer );
             }
 
             if (x > 125 && x < 225 && y > 300 && y < 356) renderTexture(replay_click, 125, 300, renderer);

@@ -64,12 +64,20 @@ int main(int argc, char *argv[])
     Sprite flappy_blue_bird;
     SDL_Texture* FL_BLUE_BiRD_Texture = graphics.loadTexture("picture\\blue_bird.png");
     flappy_blue_bird.init(FL_BLUE_BiRD_Texture, FL_BLUE_BIRD_FRAMES, FL_BLUE_BIRD_CLIPS);
+    Sprite bat;
+    SDL_Texture* BAT_Texture = graphics.loadTexture("picture\\bat_fly.png");
+    bat.init(BAT_Texture, BAT_FRAMES, BAT_CLIPS);
     Sprite saw;
+    Sprite saw2;
     SDL_Texture* SAW_Texture = graphics.loadTexture("picture\\saw.png");
     saw.init(SAW_Texture, SAW_FRAMES, SAW_CLIPS);
+    saw2.init(SAW_Texture, SAW_FRAMES, SAW_CLIPS);
     Sprite bananas;
     SDL_Texture* BANANAS_Texture = graphics.loadTexture("picture\\Bananas.png");
     bananas.init(BANANAS_Texture, BANANAS_FRAMES, BANANAS_CLIPS);
+    Sprite melon;
+    SDL_Texture* MELON_Texture = graphics.loadTexture("picture\\Melon.png");
+    melon.init(MELON_Texture, BANANAS_FRAMES, BANANAS_CLIPS);
     Sprite Collected;
     SDL_Texture* COLLECTED_Texture = graphics.loadTexture("picture\\Collected.png");
     Collected.init(COLLECTED_Texture, COLLECTED_FRAMES, COLLECTED_CLIPS);
@@ -92,7 +100,6 @@ int main(int argc, char *argv[])
     ifstream in_file("D:\\C++\\GameProject\\maxScore.txt");
     if (in_file.is_open()) {
         in_file >> maxScore;
-        cout << maxScore << "\n";
     }
     in_file.close();
 
@@ -106,9 +113,12 @@ int main(int argc, char *argv[])
             Count = 0;
             die_count = HEART;
             flappy_bird.SetPos(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
-            flappy_blue_bird.SetPos(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 200) + 80);
+            flappy_blue_bird.SetPos(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 220) + 40);
+            bat.SetPos(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 220) + 40);
             bananas.SetBatDau();
+            melon.SetBatDau();
             saw.SetBatDau();
+            saw2.SetBatDau();
             colu->SetBatDau(wcol, hcol);
         }
         else if(continue_){
@@ -155,7 +165,7 @@ int main(int argc, char *argv[])
             land.scroll(2);
             graphics.render_back_land(land);
 
-            if (Count >= 15) {
+            if (Count >= 12) {
                 flappy_blue_bird.moveChimXanh();
                 flappy_blue_bird.tick();
                 flappy_blue_bird.Render(graphics.renderer);
@@ -163,6 +173,18 @@ int main(int argc, char *argv[])
                 if(VaChimXanh && !flappy_blue_bird.check){
                     die_count--;
                     flappy_blue_bird.check = true;
+                    if (volume_on) graphics.play(touch);
+                }
+            }
+
+            if (Count >= 15) {
+                bat.moveDoi();
+                bat.tick();
+                bat.Render(graphics.renderer);
+                bool VaDoi = flappy_bird.VaCham(bat.GetRect());
+                if(VaDoi && !bat.check){
+                    die_count--;
+                    bat.check = true;
                     if (volume_on) graphics.play(touch);
                 }
             }
@@ -175,6 +197,15 @@ int main(int argc, char *argv[])
                 if(VaSaw && !saw.check){
                     die_count--;
                     saw.check = true;
+                    if (volume_on) graphics.play(touch);
+                }
+                saw2.moveSaw();
+                saw2.tick();
+                saw2.Render(graphics.renderer);
+                bool VaSaw2 = flappy_bird.VaCham(saw2.GetRect());
+                if(VaSaw2 && !saw2.check){
+                    die_count--;
+                    saw2.check = true;
                     if (volume_on) graphics.play(touch);
                 }
             }
@@ -201,7 +232,28 @@ int main(int argc, char *argv[])
                     Collected.Render(graphics.renderer);
                     if(Collected.currentFrame == 5){
                         bananas.check = false;
-                        bananas.SetPos(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 200) + 80);
+                        bananas.SetPos(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 220) + 40);
+                    }
+                }
+            }
+
+            if (Count >= 10) {
+                Collected.SetPos((int)melon.x, (int)melon.y);
+                melon.moveSaw();
+                melon.tick();
+                melon.Render(graphics.renderer);
+                bool VaMelon = flappy_bird.VaCham(melon.GetRect());
+                if(VaMelon && !melon.check){
+                    if (die_count < HEART) die_count++;
+                    melon.check = true;
+                    if (volume_on) graphics.play(pop);
+                }
+                if(melon.check){
+                    Collected.tick();
+                    Collected.Render(graphics.renderer);
+                    if(Collected.currentFrame == 5){
+                        melon.check = false;
+                        melon.SetPos(rand() % SCREEN_WIDTH + SCREEN_WIDTH, rand() % (SCREEN_HEIGHT - 220) + 40);
                     }
                 }
             }
@@ -240,7 +292,6 @@ int main(int argc, char *argv[])
     ofstream out_file("D:\\C++\\GameProject\\maxScore.txt");
     if (out_file.is_open()) {
         out_file << maxScore;
-        cout << maxScore;
     }
     out_file.close();
 

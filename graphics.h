@@ -54,8 +54,8 @@ struct Sprite
         y= y_;
     }
     void SetBatDau(){
-        x = SCREEN_WIDTH + 20;
-        y = rand() % (SCREEN_HEIGHT - 40);
+        x = rand() % SCREEN_WIDTH + SCREEN_WIDTH;
+        y = rand() % (SCREEN_HEIGHT - 220) + 40;
     }
     SDL_Rect GetRect(){
         SDL_Rect rect = {x, y, width, height};
@@ -90,7 +90,7 @@ struct Sprite
         double top = object.y;
         double bottom = object.y + object.h;
 
-        if((x <= right && ( x + width >= left)) && ( y <= bottom && (y + width) >= top ) ) return true;
+        if((x <= (right-4) && ( x + width >= (left+4))) && ( y <= (bottom-4) && (y + width) >= (top+4) ) ) return true;
         return false;
     }
     bool VuotCot(Column* col){
@@ -105,8 +105,17 @@ struct Sprite
         x -= BLUE_BIRD_SPEED;
         if( x < -width ){
             check = false;
-            x = SCREEN_WIDTH*2;
-            y = rand() % (SCREEN_HEIGHT - 200) + 80;
+            x = rand() % SCREEN_WIDTH + SCREEN_WIDTH;
+            y = rand() % (SCREEN_HEIGHT - 220) + 40;
+        }
+    }
+    // Dơi
+    void moveDoi(){
+        x -= DOI_SPEED;
+        if( x < -width ){
+            check = false;
+            x = rand() % SCREEN_WIDTH + SCREEN_WIDTH;
+            y = rand() % (SCREEN_HEIGHT - 220) + 40;
         }
     }
     //Saw
@@ -114,8 +123,8 @@ struct Sprite
         x -= SAW_SPEED;
         if( x < -width ){
             check = false;
-            x = SCREEN_WIDTH*2;
-            y = rand() % (SCREEN_HEIGHT - 200) + 80;
+            x = rand() % SCREEN_WIDTH + SCREEN_WIDTH;
+            y = rand() % (SCREEN_HEIGHT - 220) + 40;
         }
     }
 };
