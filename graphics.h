@@ -1,24 +1,35 @@
 #ifndef _GRAPHICS__H
 #define _GRAPHICS__H
 
-#include <vector>
-#include <string.h>
+#include <bits/stdc++.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 #include "def.h"
+#include "column.h"
 
+using namespace std;
 
+const char* vers (long c) {
+    string a = to_string(c);
+    return a.c_str();
+}
 
 // THÊM PHẦN HOẠT HÌNH - NHÂN VẬT HOẠT ĐỘNG
 struct Sprite
 {
+    double x = 0, dx = 0;
+    double y = 0, dy = 0;
+    double width = 0;
+    double height = 0;
+
+    bool check = false;
+
     SDL_Texture* texture;
-    std::vector<SDL_Rect> clips;
+    vector<SDL_Rect> clips;
     int currentFrame = 0;
 
-    // Hàm init() có nhiệm vụ khởi tạo bộ ảnh hoạt hình từ texture, số khung hình (frames) và mảng chứa tọa độ các khung hình trong ảnh.
     void init(SDL_Texture* _texture, int frames, const int _clips [][4]) {
         texture = _texture;
         SDL_Rect clip;
@@ -29,19 +40,85 @@ struct Sprite
             clip.h = _clips[i][3];
             clips.push_back(clip);
         }
+        width = clips[0].w;
+        height = clips[0].h;
     }
-
-    // HÀM TICK đẩy chỉ số khung hình hiện tại tới khung tiếp theo trong chuỗi, hàm này sẽ được gọi ở mỗi nhịp gameloop.
     void tick() {
         currentFrame = (currentFrame + 1) % clips.size();
     }
-
-    // Hàm getCurrentClip() trả về khung hình hiện tại để tiện cho việc vẽ.
     const SDL_Rect* getCurrentClip() const {
         return &(clips[currentFrame]);
     }
-};
+    void SetPos(const int& x_, const int& y_){
+        x = x_;
+        y= y_;
+    }
+    void SetBatDau(){
+        x = SCREEN_WIDTH + 20;
+        y = rand() % (SCREEN_HEIGHT - 40);
+    }
+    SDL_Rect GetRect(){
+        SDL_Rect rect = {x, y, width, height};
+        return rect;
+    }
+    void jump(){
+        dy = -INITIAL_SPEED_BIRD;
+    }
+    void move(){
+        dy += INITIAL_SPEED;
+        y += dy;
+    }
+    bool VaManHinh(){
+        if (y <= 0) {
+            y = 0;
+            return true;
+        }
+        if( y + width >= SCREEN_HEIGHT ) {
+            y = SCREEN_HEIGHT - width;
+            return true;;
+        }
+        return false;
+    }
+    void Render(SDL_Renderer* renderer){
+        const SDL_Rect* clip = getCurrentClip();
+        SDL_Rect renderquad = {x, y, width, height};
+        SDL_RenderCopy(renderer, texture, clip, &renderquad);
+    }
+    bool VaCham(const SDL_Rect& object){
+        double left = object.x;
+        double right = object.x +object.w;
+        double top = object.y;
+        double bottom = object.y + object.h;
 
+        if((x <= right && ( x + width >= left)) && ( y <= bottom && (y + width) >= top ) ) return true;
+        return false;
+    }
+    bool VuotCot(Column* col){
+        if(x > (col->destRect1.x + col->destRect1.w) && !col->vuot_cot){
+            col->vuot_cot = true;
+            return true;
+        }
+        return false;
+    }
+    //Chim xanh
+    void moveChimXanh(){
+        x -= BLUE_BIRD_SPEED;
+        if( x < -width ){
+            check = false;
+            x = SCREEN_WIDTH*2;
+            y = rand() % (SCREEN_HEIGHT - 200) + 80;
+        }
+    }
+    //Saw
+    void moveSaw(){
+        x -= SAW_SPEED;
+        if( x < -width ){
+            check = false;
+            x = SCREEN_WIDTH*2;
+            y = rand() % (SCREEN_HEIGHT - 200) + 80;
+        }
+    }
+};
 
 // THÊM PHẦN NỀN TRÔI
 struct ScrollingBackground
@@ -78,8 +155,6 @@ struct Graphics {
             logErrorAndExit("SDL_Init", SDL_GetError());
 
         window = SDL_CreateWindow("FLAPPY BIRD GAME!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-        //full screen
-        //window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
         if (window == nullptr) logErrorAndExit("CreateWindow", SDL_GetError());
 
         if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG))
@@ -87,8 +162,6 @@ struct Graphics {
 
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED |
                                               SDL_RENDERER_PRESENTVSYNC);
-        //Khi chạy trong máy ảo (ví dụ phòng máy ở trường)
-        //renderer = SDL_CreateSoftwareRenderer(SDL_GetWindowSurface(window));
 
         if (renderer == nullptr) logErrorAndExit("CreateRenderer", SDL_GetError());
 

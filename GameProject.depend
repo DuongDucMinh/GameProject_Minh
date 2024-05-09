@@ -1,23 +1,24 @@
 # depslib dependency file v1.0
-1715150191 source:d:\c++\gameproject\column.cpp
+1715229286 source:d:\c++\gameproject\column.cpp
 	"column.h"
-	"graphics.h"
-	<queue>
 
-1715137747 d:\c++\gameproject\column.h
-	<queue>
-	<SDL.h>
-
-1714994410 d:\c++\gameproject\graphics.h
-	<vector>
-	<string.h>
+1715229118 d:\c++\gameproject\column.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_mixer.h>
 	<SDL_ttf.h>
 	"def.h"
 
-1715150565 d:\c++\gameproject\def.h
+1715226608 d:\c++\gameproject\graphics.h
+	<bits/stdc++.h>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<SDL_ttf.h>
+	"def.h"
+	"column.h"
+
+1715226560 d:\c++\gameproject\def.h
 
 1714461676 source:d:\c++\gameproject\collition.cpp
 	"Collition.h"
@@ -25,8 +26,9 @@
 1714461676 d:\c++\gameproject\collition.h
 	<SDL.h>
 
-1715162213 source:d:\c++\gameproject\main.cpp
+1715251265 source:d:\c++\gameproject\main.cpp
 	<bits/stdc++.h>
+	<fstream>
 	<cstdlib>
 	<ctime>
 	<iostream>
@@ -35,12 +37,10 @@
 	<SDL_ttf.h>
 	"graphics.h"
 	"def.h"
-	"game.h"
 	"column.h"
-	"Collition.h"
 	"menu.h"
 
-1715162213 d:\c++\gameproject\game.h
+1715168736 d:\c++\gameproject\game.h
 	<SDL.h>
 	<cstdlib>
 	<ctime>
@@ -51,7 +51,7 @@
 
 1714611302 d:\c++\gameproject\declare.h
 
-1715162632 d:\c++\gameproject\menu.h
+1715248642 d:\c++\gameproject\menu.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>

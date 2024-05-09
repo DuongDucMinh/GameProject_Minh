@@ -2,11 +2,18 @@
 #ifndef _DEFS__H
 #define _DEFS__H
 
+#define INITIAL_SPEED 0.25
+#define INITIAL_SPEED_1 2
+#define INITIAL_SPEED_2 4
+#define INITIAL_SPEED_BIRD 3.5
+#define BLUE_BIRD_SPEED 3
+#define SAW_SPEED 2
+#define HEART 3
+
 const int SCREEN_WIDTH = 350; // 800 350
 const int SCREEN_HEIGHT = 570; // 600 480
 //const char* WINDOW_TITLE = "FLAPPY BIRD GAME!";
 const int COLUMN_WIDTH = 65;
-const int delayTime = 5000;
 
 const int FL_BIRD_CLIPS[][4] = {
     {  0, 0, 60, 42},
