@@ -48,6 +48,21 @@ void Column::LoadImageColumn(SDL_Renderer* renderer){
     destRect2.y = destRect1.y + destRect1.h + COLUMN_SPACE;
 }
 
+bool Column::isOffScreen() {
+    bool off = false;
+    if(destRect1.x <= -(destRect1.w) || destRect2.x <= -(destRect2.w)){
+        off = true;
+        destRect1.x = SCREEN_WIDTH;
+        destRect2.x = SCREEN_WIDTH;
+        destRect1.y = rand() % 200 - 300;
+        destRect2.y = destRect1.y + destRect1.h + COLUMN_SPACE;
+
+        va_cham = false;
+        vuot_cot = false;
+    }
+    return off;
+}
+
 void Column::move() {
     destRect1.x -= COLUMN_SPEED;
     destRect2.x = destRect1.x;

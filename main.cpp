@@ -49,21 +49,20 @@ int main(int argc, char *argv[])
 
     ScrollingBackground background;
     ScrollingBackground land;
-    background.setTexture(graphics.loadTexture("picture\\background_night.png"));
-    land.setTexture(graphics.loadTexture("picture\\land.png"));
+    background.setTexture(graphics.loadTexture("picture\\background_3.png"));
+    land.setTexture(graphics.loadTexture("picture\\land1.jpg"));
 
     Column* colu = new Column();
     colu->LoadImageColumn(graphics.renderer);
-    Uint32 startTime = SDL_GetTicks();
     int wcol = colu->destRect1.w;
     int hcol = colu->destRect1.h;
 
     Sprite flappy_bird;
     SDL_Texture* FL_Bird_Texture = graphics.loadTexture("picture\\bird.png");
     flappy_bird.init(FL_Bird_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
-    Sprite flappy_blue_bird;
-    SDL_Texture* FL_BLUE_BiRD_Texture = graphics.loadTexture("picture\\blue_bird.png");
-    flappy_blue_bird.init(FL_BLUE_BiRD_Texture, FL_BLUE_BIRD_FRAMES, FL_BLUE_BIRD_CLIPS);
+    Sprite monster;
+    SDL_Texture* MONSTER_Texture = graphics.loadTexture("picture\\monster.png");
+    monster.init(MONSTER_Texture, MONSTER_FRAMES, MONSTER_CLIPS);
     Sprite bat;
     SDL_Texture* BAT_Texture = graphics.loadTexture("picture\\bat_fly.png");
     bat.init(BAT_Texture, BAT_FRAMES, BAT_CLIPS);
@@ -113,13 +112,14 @@ int main(int argc, char *argv[])
             Count = 0;
             die_count = HEART;
             flappy_bird.SetPos(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
-            flappy_blue_bird.SetPos(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 220) + 40);
+            monster.SetPos(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 220) + 40);
             bat.SetPos(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 220) + 40);
             bananas.SetBatDau();
             melon.SetBatDau();
             saw.SetBatDau();
             saw2.SetBatDau();
             colu->SetBatDau(wcol, hcol);
+
         }
         else if(continue_){
             start_ = false;
@@ -149,9 +149,9 @@ int main(int argc, char *argv[])
             else colu->move();
             colu->render(graphics.renderer);
 
-            bool VaCot1 = flappy_bird.VaCham(colu->destRect1);
-            bool VaCot2 = flappy_bird.VaCham(colu->destRect2);
-            if((VaCot1 || VaCot2) && !colu->va_cham){
+            bool VaCot1a = flappy_bird.VaCham(colu->destRect1);
+            bool VaCot1b = flappy_bird.VaCham(colu->destRect2);
+            if((VaCot1a || VaCot1b) && !colu->va_cham){
                 die_count--;
                 colu->va_cham = true;
                 if (volume_on) graphics.play(touch);
@@ -166,15 +166,16 @@ int main(int argc, char *argv[])
             graphics.render_back_land(land);
 
             if (Count >= 12) {
-                flappy_blue_bird.moveChimXanh();
-                flappy_blue_bird.tick();
-                flappy_blue_bird.Render(graphics.renderer);
-                bool VaChimXanh = flappy_bird.VaCham(flappy_blue_bird.GetRect());
-                if(VaChimXanh && !flappy_blue_bird.check){
+                monster.moveMonster();
+                monster.tick();
+                monster.Render(graphics.renderer);
+                bool VaMonster = flappy_bird.VaCham(monster.GetRect());
+                if(VaMonster && !monster.check){
                     die_count--;
-                    flappy_blue_bird.check = true;
+                    monster.check = true;
                     if (volume_on) graphics.play(touch);
                 }
+
             }
 
             if (Count >= 15) {

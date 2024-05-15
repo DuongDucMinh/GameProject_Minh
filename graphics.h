@@ -101,8 +101,8 @@ struct Sprite
         return false;
     }
     //Chim xanh
-    void moveChimXanh(){
-        x -= BLUE_BIRD_SPEED;
+    void moveMonster(){
+        x -= MONSTER_SPEED;
         if( x < -width ){
             check = false;
             x = rand() % SCREEN_WIDTH + SCREEN_WIDTH;
@@ -129,7 +129,6 @@ struct Sprite
     }
 };
 
-// THÊM PHẦN NỀN TRÔI
 struct ScrollingBackground
 {
     SDL_Texture* texture;
@@ -177,7 +176,6 @@ struct Graphics {
         SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
         SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        //Initialize SDL_mixer
         if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
         {
             logErrorAndExit( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
@@ -250,7 +248,7 @@ struct Graphics {
         SDL_Quit();
     }
 
-    // THÊM PHẦN NẠP TEXT
+    // NẠP TEXT
     TTF_Font* loadFont(const char* path, int size)
     {
         TTF_Font* gFont = TTF_OpenFont( path, size );
@@ -276,7 +274,7 @@ struct Graphics {
         return texture;
     }
 
-    // THÊM HÀM PHẦN BACKGROUND TRÔI
+    // BACKGROUND TRÔI
     void render_back (const ScrollingBackground& background)
     {
         renderTexture(background.texture, background.scrollingOffset, 0);
@@ -288,8 +286,6 @@ struct Graphics {
         renderTexture(background.texture, background.scrollingOffset - background.width, 480);
     }
 
-
-    // THÊM PHẦN HOẠT HÌNH NHÂN VẬT HOẠT ĐỘNG
     void render (int x, int y, const Sprite& sprite)
     {
         const SDL_Rect* clip = sprite.getCurrentClip();
@@ -297,7 +293,7 @@ struct Graphics {
         SDL_RenderCopy(renderer, sprite.texture, clip, &renderQuad);
     }
 
-    // THÊM PHẦN MUSIC
+    // MUSIC
     Mix_Music *loadMusic(const char* path)
     {
         Mix_Music *gMusic = Mix_LoadMUS(path);

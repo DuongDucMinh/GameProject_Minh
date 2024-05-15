@@ -61,7 +61,7 @@ struct Menu {
         ScrollingBackground background_wait;
         ScrollingBackground land;
         background_wait.setTexture(IMG_LoadTexture(renderer, "picture\\background.png"));
-        land.setTexture(IMG_LoadTexture(renderer,"picture\\land.png"));
+        land.setTexture(IMG_LoadTexture(renderer,"picture\\land1.jpg"));
         SDL_Texture* volume_on = IMG_LoadTexture(renderer, "picture\\volume_on.png");
         SDL_Texture* volume_off = IMG_LoadTexture(renderer, "picture\\volume_off.png");
         Sprite flappy_bird;
@@ -80,7 +80,7 @@ struct Menu {
                      exit(0);
                      break;
                 case SDL_MOUSEBUTTONDOWN:
-                     if (x > 125 && x < 225 && y > 300 && y < 356) return true;
+                     if (x > (SCREEN_WIDTH/2 - 50) && x < (SCREEN_WIDTH/2 + 50) && y > 300 && y < 356) return true;
                      break;
             }
 
@@ -92,7 +92,7 @@ struct Menu {
             flappy_bird.tick();
             flappy_bird.Render(renderer);
 
-            renderTexture(start_fb, 0, 100, renderer);
+            renderTexture(start_fb, SCREEN_WIDTH/2 - 175, 100, renderer);
 
             renderTexture(volume_on, SCREEN_WIDTH - 80 , 40 , renderer );
 
@@ -106,8 +106,8 @@ struct Menu {
                 renderTexture (volume_off, SCREEN_WIDTH - 80 , 40 , renderer );
             }
 
-            if (x > 125 && x < 225 && y > 300 && y < 356) renderTexture(replay_click, 125, 300, renderer);
-            else renderTexture(replay, 125, 300, renderer);
+            if (x > (SCREEN_WIDTH/2 - 50) && x < (SCREEN_WIDTH/2 + 50) && y > 300 && y < 356) renderTexture(replay_click, SCREEN_WIDTH/2 - 50, 300, renderer);
+            else renderTexture(replay, SCREEN_WIDTH/2 - 50, 300, renderer);
 
             SDL_RenderPresent(renderer);
 

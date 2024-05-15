@@ -15,6 +15,7 @@ public:
     ~Column();
 
     void LoadImageColumn(SDL_Renderer* renderer);
+    bool isOffScreen();
     void move();
     void move2();
     void render(SDL_Renderer* renderer);
