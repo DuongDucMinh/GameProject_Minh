@@ -49,13 +49,17 @@ int main(int argc, char *argv[])
 
     ScrollingBackground background;
     ScrollingBackground land;
-    background.setTexture(graphics.loadTexture("picture\\background_3.png"));
+    background.setTexture(graphics.loadTexture("picture\\background_1.png"));
     land.setTexture(graphics.loadTexture("picture\\land1.jpg"));
 
-    Column* colu = new Column();
-    colu->LoadImageColumn(graphics.renderer);
-    int wcol = colu->destRect1.w;
-    int hcol = colu->destRect1.h;
+    Column* colu1 = new Column();
+    colu1->LoadImageColumn(graphics.renderer);
+    int wcol = colu1->destRect1.w;
+    int hcol = colu1->destRect1.h;
+    Column* colu2 = new Column();
+    colu2->LoadImageColumn(graphics.renderer);
+    Column* colu3 = new Column();
+    colu3->LoadImageColumn(graphics.renderer);
 
     Sprite flappy_bird;
     SDL_Texture* FL_Bird_Texture = graphics.loadTexture("picture\\bird.png");
@@ -108,7 +112,7 @@ int main(int argc, char *argv[])
             lose_ = false;
             start_ = false;
             wait = true;
-            continue_ = menu.startMenu(graphics.renderer, volume_on);
+            continue_ = menu.startMenu(graphics.renderer, volume_on, flappy_bird, background);
             Count = 0;
             die_count = HEART;
             flappy_bird.SetPos(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
@@ -118,8 +122,9 @@ int main(int argc, char *argv[])
             melon.SetBatDau();
             saw.SetBatDau();
             saw2.SetBatDau();
-            colu->SetBatDau(wcol, hcol);
-
+            colu1->SetBatDau(wcol, hcol, SCREEN_WIDTH);
+            colu2->SetBatDau(wcol, hcol, SCREEN_WIDTH + COLUMN_DISTANCE);
+            colu3->SetBatDau(wcol, hcol, SCREEN_WIDTH + 2*COLUMN_DISTANCE);
         }
         else if(continue_){
             start_ = false;
@@ -145,18 +150,45 @@ int main(int argc, char *argv[])
                 if (volume_on) graphics.play(touch);
             }
 
-            if (Count >= 10) colu->move2();
-            else colu->move();
-            colu->render(graphics.renderer);
+            if (Count >= 10) {
+                colu1->move2();
+                colu2->move2();
+                colu3->move2();
+            }
+            else {
+                colu1->move();
+                colu2->move();
+                colu3->move();
+            }
+            colu1->render(graphics.renderer);
+            colu2->render(graphics.renderer);
+            colu3->render(graphics.renderer);
 
-            bool VaCot1a = flappy_bird.VaCham(colu->destRect1);
-            bool VaCot1b = flappy_bird.VaCham(colu->destRect2);
-            if((VaCot1a || VaCot1b) && !colu->va_cham){
+            bool VaCot1a = flappy_bird.VaCham(colu1->destRect1);
+            bool VaCot1b = flappy_bird.VaCham(colu1->destRect2);
+            if((VaCot1a || VaCot1b) && !colu1->va_cham){
                 die_count--;
-                colu->va_cham = true;
+                colu1->va_cham = true;
                 if (volume_on) graphics.play(touch);
             }
-            if(flappy_bird.VuotCot(colu)){
+
+            bool VaCot2a = flappy_bird.VaCham(colu2->destRect1);
+            bool VaCot2b = flappy_bird.VaCham(colu2->destRect2);
+            if((VaCot2a || VaCot2b) && !colu2->va_cham){
+                die_count--;
+                colu2->va_cham = true;
+                if (volume_on) graphics.play(touch);
+            }
+
+            bool VaCot3a = flappy_bird.VaCham(colu3->destRect1);
+            bool VaCot3b = flappy_bird.VaCham(colu3->destRect2);
+            if((VaCot3a || VaCot3b) && !colu3->va_cham){
+                die_count--;
+                colu3->va_cham = true;
+                if (volume_on) graphics.play(touch);
+            }
+
+            if(flappy_bird.VuotCot(colu1) || flappy_bird.VuotCot(colu2) || flappy_bird.VuotCot(colu3) ){
                 Count++;
                 if (volume_on) graphics.play(fpass);
                 if (maxScore < Count) maxScore = Count;
@@ -200,6 +232,8 @@ int main(int argc, char *argv[])
                     saw.check = true;
                     if (volume_on) graphics.play(touch);
                 }
+            }
+            if (Count >= 10) {
                 saw2.moveSaw();
                 saw2.tick();
                 saw2.Render(graphics.renderer);

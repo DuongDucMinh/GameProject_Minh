@@ -9,6 +9,10 @@
 #define MONSTER_SPEED 3
 #define DOI_SPEED 4
 #define SAW_SPEED 2
+#define COLUMN_SPEED 2
+#define COLUMN_SPEED_Y 1
+#define COLUMN_SPACE 125
+#define COLUMN_DISTANCE 255
 #define HEART 3
 
 const int SCREEN_WIDTH = 700; // 800 350 700

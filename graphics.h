@@ -93,6 +93,7 @@ struct Sprite
         if((x <= (right-4) && ( x + width >= (left+4))) && ( y <= (bottom-4) && (y + width) >= (top+4) ) ) return true;
         return false;
     }
+
     bool VuotCot(Column* col){
         if(x > (col->destRect1.x + col->destRect1.w) && !col->vuot_cot){
             col->vuot_cot = true;

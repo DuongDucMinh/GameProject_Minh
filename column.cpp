@@ -20,18 +20,18 @@ Column::Column() {
 
 Column:: ~Column() {}
 
-void Column::SetBatDau(const int& w, const int& h){
-    destRect1.x = SCREEN_WIDTH;
+void Column::SetBatDau(const int& w, const int& h, const int& x){
+    destRect1.x = x;
     destRect1.y = rand() % 200 - 300;
     destRect1.w = w;
     destRect1.h = h;
 
-    destRect2.x = SCREEN_WIDTH;
+    destRect2.x = x;
     destRect2.y = destRect1.y + destRect1.h + COLUMN_SPACE;
     destRect2.w = w;
     destRect2.h = h;
 
-    len_xuong = 1;
+    len_xuong = rand() % 2;
     vuot_cot = false;
     va_cham = false;
 }
@@ -46,21 +46,6 @@ void Column::LoadImageColumn(SDL_Renderer* renderer){
     destRect2.w = destRect1.w;
     destRect2.h = destRect1.h;
     destRect2.y = destRect1.y + destRect1.h + COLUMN_SPACE;
-}
-
-bool Column::isOffScreen() {
-    bool off = false;
-    if(destRect1.x <= -(destRect1.w) || destRect2.x <= -(destRect2.w)){
-        off = true;
-        destRect1.x = SCREEN_WIDTH;
-        destRect2.x = SCREEN_WIDTH;
-        destRect1.y = rand() % 200 - 300;
-        destRect2.y = destRect1.y + destRect1.h + COLUMN_SPACE;
-
-        va_cham = false;
-        vuot_cot = false;
-    }
-    return off;
 }
 
 void Column::move() {
