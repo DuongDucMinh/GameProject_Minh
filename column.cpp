@@ -36,9 +36,19 @@ void Column::SetBatDau(const int& w, const int& h, const int& x){
     va_cham = false;
 }
 
-void Column::LoadImageColumn(SDL_Renderer* renderer){
-    col1 = IMG_LoadTexture(renderer, "picture//pipe_up.png");
-    col2 = IMG_LoadTexture(renderer, "picture//pipe_down.jpg");
+void Column::LoadImageColumn(SDL_Renderer* renderer, int choose_pipe){
+    if (choose_pipe == 1) {
+        col1 = IMG_LoadTexture(renderer, "picture\\pipe\\pipe_up.png");
+        col2 = IMG_LoadTexture(renderer, "picture\\pipe\\pipe_down.jpg");
+    }
+    if (choose_pipe == 2) {
+        col1 = IMG_LoadTexture(renderer, "picture\\pipe\\pipe_house_up.jpg");
+        col2 = IMG_LoadTexture(renderer, "picture\\pipe\\pipe_house_down.jpg");
+    }
+    if (choose_pipe == 3) {
+        col1 = IMG_LoadTexture(renderer, "picture\\pipe\\pipe_block_up.jpg");
+        col2 = IMG_LoadTexture(renderer, "picture\\pipe\\pipe_block_down.jpg");
+    }
     SDL_Rect dest;
     SDL_QueryTexture(col1, NULL, NULL, &dest.w, &dest.h);
     destRect1.w = dest.w;
@@ -87,6 +97,7 @@ void Column::move2(){
         if(destRect2.y >= SCREEN_HEIGHT - 130) len_xuong = (len_xuong + 1)%2;
     }
 }
+
 
 void Column::render(SDL_Renderer* renderer) {
     SDL_RenderCopy(renderer, col1, NULL, &destRect1);

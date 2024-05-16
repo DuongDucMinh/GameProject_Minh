@@ -46,43 +46,45 @@ int main(int argc, char *argv[])
 
     SDL_Texture* pause = graphics.loadTexture("picture\\pause.png");
     SDL_Texture* heart = graphics.loadTexture("picture\\heart.png");
+    SDL_Texture* bg_prev = graphics.loadTexture("picture\\map\\background_1.png");
+    SDL_Texture* land_prev = graphics.loadTexture("picture\\land\\land1.jpg");
 
     ScrollingBackground background;
     ScrollingBackground land;
-    background.setTexture(graphics.loadTexture("picture\\background_1.png"));
-    land.setTexture(graphics.loadTexture("picture\\land1.jpg"));
+    background.setTexture(graphics.loadTexture("picture\\map\\background_1.png"));
+    land.setTexture(graphics.loadTexture("picture\\land\\land1.jpg"));
 
     Column* colu1 = new Column();
-    colu1->LoadImageColumn(graphics.renderer);
+    colu1->LoadImageColumn(graphics.renderer, 1);
     int wcol = colu1->destRect1.w;
     int hcol = colu1->destRect1.h;
     Column* colu2 = new Column();
-    colu2->LoadImageColumn(graphics.renderer);
+    colu2->LoadImageColumn(graphics.renderer, 1);
     Column* colu3 = new Column();
-    colu3->LoadImageColumn(graphics.renderer);
+    colu3->LoadImageColumn(graphics.renderer, 1);
 
     Sprite flappy_bird;
-    SDL_Texture* FL_Bird_Texture = graphics.loadTexture("picture\\bird.png");
+    SDL_Texture* FL_Bird_Texture = graphics.loadTexture("picture\\bird\\bird.png");
     flappy_bird.init(FL_Bird_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
     Sprite monster;
-    SDL_Texture* MONSTER_Texture = graphics.loadTexture("picture\\monster.png");
+    SDL_Texture* MONSTER_Texture = graphics.loadTexture("picture\\sprite\\monster.png");
     monster.init(MONSTER_Texture, MONSTER_FRAMES, MONSTER_CLIPS);
     Sprite bat;
-    SDL_Texture* BAT_Texture = graphics.loadTexture("picture\\bat_fly.png");
+    SDL_Texture* BAT_Texture = graphics.loadTexture("picture\\sprite\\bat_fly.png");
     bat.init(BAT_Texture, BAT_FRAMES, BAT_CLIPS);
     Sprite saw;
     Sprite saw2;
-    SDL_Texture* SAW_Texture = graphics.loadTexture("picture\\saw.png");
+    SDL_Texture* SAW_Texture = graphics.loadTexture("picture\\sprite\\saw.png");
     saw.init(SAW_Texture, SAW_FRAMES, SAW_CLIPS);
     saw2.init(SAW_Texture, SAW_FRAMES, SAW_CLIPS);
     Sprite bananas;
-    SDL_Texture* BANANAS_Texture = graphics.loadTexture("picture\\Bananas.png");
+    SDL_Texture* BANANAS_Texture = graphics.loadTexture("picture\\sprite\\Bananas.png");
     bananas.init(BANANAS_Texture, BANANAS_FRAMES, BANANAS_CLIPS);
     Sprite melon;
-    SDL_Texture* MELON_Texture = graphics.loadTexture("picture\\Melon.png");
+    SDL_Texture* MELON_Texture = graphics.loadTexture("picture\\sprite\\Melon.png");
     melon.init(MELON_Texture, BANANAS_FRAMES, BANANAS_CLIPS);
     Sprite Collected;
-    SDL_Texture* COLLECTED_Texture = graphics.loadTexture("picture\\Collected.png");
+    SDL_Texture* COLLECTED_Texture = graphics.loadTexture("picture\\sprite\\Collected.png");
     Collected.init(COLLECTED_Texture, COLLECTED_FRAMES, COLLECTED_CLIPS);
 
     TTF_Font* font = graphics.loadFont("Gameplay Regular.ttf", 35);
@@ -112,7 +114,7 @@ int main(int argc, char *argv[])
             lose_ = false;
             start_ = false;
             wait = true;
-            continue_ = menu.startMenu(graphics.renderer, volume_on, flappy_bird, background);
+            continue_ = menu.startMenu(graphics.renderer, volume_on, flappy_bird, background, bg_prev, land, land_prev, colu1, colu2, colu3);
             Count = 0;
             die_count = HEART;
             flappy_bird.SetPos(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
@@ -296,14 +298,14 @@ int main(int argc, char *argv[])
             flappy_bird.tick();
             flappy_bird.Render(graphics.renderer);
 
+            SDL_Texture* Grade = graphics.renderText(vers(Count), font, color);
+            graphics.renderTexture(Grade, SCREEN_WIDTH/2 - 5 , 17 );
+            for (int i = 1; i <= die_count; i++) {
+                graphics.renderTexture( heart , SCREEN_WIDTH - 20 - 30*i , 24);
+            }
+
             graphics.renderTexture(pause, 20 , 20 );
             if (event.type == SDL_MOUSEBUTTONDOWN && x > 20 && x < 52 && y > 20 && y < 54) menu.pause(graphics.renderer, volume_on);
-
-            SDL_Texture* Grade = graphics.renderText(vers(Count), font, color);
-            graphics.renderTexture(Grade, 170 , 17 );
-            for (int i = 1; i <= die_count; i++) {
-                graphics.renderTexture( heart , 340 - 30*i , 24);
-            }
 
             graphics.presentScene();
 

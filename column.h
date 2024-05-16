@@ -10,7 +10,7 @@ public:
     Column();
     ~Column();
 
-    void LoadImageColumn(SDL_Renderer* renderer);
+    void LoadImageColumn(SDL_Renderer* renderer, int choose_pipe);
     void move();
     void move2();
     void render(SDL_Renderer* renderer);

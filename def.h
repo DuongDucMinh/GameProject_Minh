@@ -15,6 +15,8 @@
 #define COLUMN_DISTANCE 255
 #define HEART 3
 
+#define COLUMN_INTERVAL 5000
+
 const int SCREEN_WIDTH = 700; // 800 350 700
 const int SCREEN_HEIGHT = 570; // 600 480
 const int COLUMN_WIDTH = 65;

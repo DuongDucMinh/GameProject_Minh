@@ -73,8 +73,8 @@ struct Sprite
             y = 0;
             return true;
         }
-        if( y + width >= SCREEN_HEIGHT ) {
-            y = SCREEN_HEIGHT - width;
+        if( y + width >= SCREEN_HEIGHT - 70) {
+            y = SCREEN_HEIGHT - width - 70;
             return true;;
         }
         return false;
@@ -283,8 +283,8 @@ struct Graphics {
     }
     void render_back_land (const ScrollingBackground& background)
     {
-        renderTexture(background.texture, background.scrollingOffset, 480);
-        renderTexture(background.texture, background.scrollingOffset - background.width, 480);
+        renderTexture(background.texture, background.scrollingOffset, 485);
+        renderTexture(background.texture, background.scrollingOffset - background.width, 485);
     }
 
     void render (int x, int y, const Sprite& sprite)
