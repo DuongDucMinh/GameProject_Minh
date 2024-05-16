@@ -53,13 +53,19 @@ struct Menu {
         SDL_FreeSurface( textSurface );
         return texture;
     }
-    void optionMenu (SDL_Renderer* renderer, Sprite& flappy_bird, ScrollingBackground& background, SDL_Texture*& bg_prev, ScrollingBackground& land, SDL_Texture*& land_prev, Column* colu1, Column* colu2, Column* colu3, long& choose) {
+    void optionMenu (SDL_Renderer* renderer, Sprite& flappy_bird, ScrollingBackground& background, SDL_Texture*& bg_prev, ScrollingBackground& land, SDL_Texture*& land_prev, long& choose, long& choose_bird) {
         SDL_Texture* bird_yell = IMG_LoadTexture(renderer, "picture\\bird\\bird_yell_pic.png");
         SDL_Texture* bird_red = IMG_LoadTexture(renderer, "picture\\bird\\bird_red_pic.png");
         SDL_Texture* bird_blue = IMG_LoadTexture(renderer, "picture\\bird\\bird_blue_pic.png");
         SDL_Texture* bg1 = IMG_LoadTexture(renderer, "picture\\map\\bg1_prev.png");
         SDL_Texture* bg2 = IMG_LoadTexture(renderer, "picture\\map\\bg2_prev.png");
         SDL_Texture* bg3 = IMG_LoadTexture(renderer, "picture\\map\\bg3_prev.png");
+        SDL_Texture* background_1 = IMG_LoadTexture(renderer, "picture\\map\\background_1.png");
+        SDL_Texture* background_2 = IMG_LoadTexture(renderer, "picture\\map\\background_2.png");
+        SDL_Texture* background_3 = IMG_LoadTexture(renderer, "picture\\map\\background_3.png");
+        SDL_Texture* land1 = IMG_LoadTexture(renderer, "picture\\land\\land1.jpg");
+        SDL_Texture* land2 = IMG_LoadTexture(renderer, "picture\\land\\land2.png");
+        SDL_Texture* land3 = IMG_LoadTexture(renderer, "picture\\land\\land3.jpg");
 
         SDL_Texture* Back = IMG_LoadTexture(renderer, "picture\\back.png");
         SDL_Texture* Vien = IMG_LoadTexture(renderer, "picture\\vien_green.png");
@@ -70,6 +76,8 @@ struct Menu {
 
         TTF_Font* font = loadFont("Gameplay Regular.ttf", 30);
         SDL_Color color = {0, 0, 0, 0};
+        SDL_Texture* choose_char = renderText("CHOOSE CHARACTER", font, color, renderer);
+        SDL_Texture* choose_map = renderText("CHOOSE MAP", font, color, renderer);
 
         flappy_bird.SetPos(SCREEN_WIDTH/2 - 29, 100);
         bool quit = false;
@@ -86,47 +94,39 @@ struct Menu {
                     if (x > 20 && x < 80 && y > 20 && y < 58) quit = true;
                     if (x > (SCREEN_WIDTH/2 - 238) && x < (SCREEN_WIDTH/2 - 180) && y > 200 && y < 242) {
                         flappy_bird.init(FL_Bird_Yell_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                        choose_bird = 1;
                     }
                     if (x > (SCREEN_WIDTH/2 - 29) && x < (SCREEN_WIDTH/2 + 29) && y > 200 && y < 242) {
                         flappy_bird.init(FL_Bird_Red_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                        choose_bird = 2;
                     }
                     if (x > (SCREEN_WIDTH/2 + 180) && x < (SCREEN_WIDTH/2 + 238) && y > 200 && y < 242) {
                         flappy_bird.init(FL_Bird_Blue_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                        choose_bird = 3;
                     }
                     if (x > (SCREEN_WIDTH/2 - 266) && x < (SCREEN_WIDTH/2 - 155) && y > 350 && y < 550) {
-                        bg_prev = IMG_LoadTexture(renderer, "picture\\map\\background_1.png");
-                        land_prev = IMG_LoadTexture(renderer, "picture\\land\\land1.jpg");
-                        background.setTexture(IMG_LoadTexture(renderer, "picture\\map\\background_1.png"));
-                        land.setTexture(IMG_LoadTexture(renderer, "picture\\land\\land1.jpg"));
+                        bg_prev = background_1;
+                        land_prev = land1;
                         choose = 1;
                     }
                     if (x > (SCREEN_WIDTH/2 - 55) && x < (SCREEN_WIDTH/2 + 56) && y > 350 && y < 550) {
-                        bg_prev = IMG_LoadTexture(renderer, "picture\\map\\background_2.png");
-                        land_prev = IMG_LoadTexture(renderer, "picture\\land\\land2.png");
-                        background.setTexture(IMG_LoadTexture(renderer, "picture\\map\\background_2.png"));
-                        land.setTexture(IMG_LoadTexture(renderer, "picture\\land\\land2.png"));
+                        bg_prev = background_2;
+                        land_prev = land2;
                         choose = 2;
                     }
                     if (x > (SCREEN_WIDTH/2 + 156) && x < (SCREEN_WIDTH/2 + 267) && y > 350 && y < 550) {
-                        bg_prev = IMG_LoadTexture(renderer, "picture\\map\\background_3.png");
-                        land_prev = IMG_LoadTexture(renderer, "picture\\land\\land3.jpg");
-                        background.setTexture(IMG_LoadTexture(renderer, "picture\\map\\background_3.png"));
-                        land.setTexture(IMG_LoadTexture(renderer, "picture\\land\\land3.jpg"));
+                        bg_prev = background_3;
+                        land_prev = land3;
                         choose = 3;
                     }
                     break;
             }
-            colu1->LoadImageColumn(renderer, choose);
-            colu2->LoadImageColumn(renderer, choose);
-            colu3->LoadImageColumn(renderer, choose);
 
             renderTexture(bg_prev, 0, 0, renderer);
             renderTexture(land_prev, 0, 485, renderer);
             renderTexture(Back, 20, 20, renderer);
 
-            SDL_Texture* choose_char = renderText("CHOOSE CHARACTER", font, color, renderer);
             renderTexture(choose_char, SCREEN_WIDTH/2 - 175 , 20, renderer );
-            SDL_Texture* choose_map = renderText("CHOOSE MAP", font, color, renderer);
             renderTexture(choose_map, SCREEN_WIDTH/2 - 105 , 280, renderer );
 
             renderTexture(bird_yell, SCREEN_WIDTH/2 - 238, 200, renderer);
@@ -154,12 +154,48 @@ struct Menu {
 
             SDL_RenderPresent(renderer);
         }
+
+        switch (choose) {
+            case 1:
+                background.setTexture(IMG_LoadTexture(renderer, "picture\\map\\background_1.png"));
+                land.setTexture(IMG_LoadTexture(renderer, "picture\\land\\land1.jpg"));
+                break;
+            case 2:
+                background.setTexture(IMG_LoadTexture(renderer, "picture\\map\\background_2.png"));
+                land.setTexture(IMG_LoadTexture(renderer, "picture\\land\\land2.png"));
+                break;
+            case 3:
+                background.setTexture(IMG_LoadTexture(renderer, "picture\\map\\background_3.png"));
+                land.setTexture(IMG_LoadTexture(renderer, "picture\\land\\land3.jpg"));
+                break;
+        }
         renderTexture(bg_prev, 0, 0, renderer);
         renderTexture(land_prev, 0, 485, renderer);
         SDL_RenderPresent(renderer);
+
+        SDL_DestroyTexture(FL_Bird_Yell_Texture); FL_Bird_Yell_Texture = NULL;
+        SDL_DestroyTexture(FL_Bird_Blue_Texture); FL_Bird_Blue_Texture = NULL;
+        SDL_DestroyTexture(FL_Bird_Red_Texture); FL_Bird_Red_Texture = NULL;
+        SDL_DestroyTexture(bird_yell); bird_yell = NULL;
+        SDL_DestroyTexture(bird_red); bird_red = NULL;
+        SDL_DestroyTexture(bird_blue); bird_blue = NULL;
+        SDL_DestroyTexture(bg1); bg1 = NULL;
+        SDL_DestroyTexture(bg2); bg2 = NULL;
+        SDL_DestroyTexture(bg3); bg3 = NULL;
+        SDL_DestroyTexture(land1); land1 = NULL;
+        SDL_DestroyTexture(land2); land2 = NULL;
+        SDL_DestroyTexture(land3); land3 = NULL;
+        SDL_DestroyTexture(background_1); background_1 = NULL;
+        SDL_DestroyTexture(background_2); background_2 = NULL;
+        SDL_DestroyTexture(background_3); background_3 = NULL;
+        SDL_DestroyTexture(choose_char); choose_char = NULL;
+        SDL_DestroyTexture(choose_map); choose_map = NULL;
+        SDL_DestroyTexture(Back); Back = NULL;
+        SDL_DestroyTexture(Vien); Vien = NULL;
+        TTF_CloseFont( font );
     }
 
-    bool startMenu (SDL_Renderer* renderer, bool& volume, Sprite& flappy_bird, ScrollingBackground& background, SDL_Texture*& bg_prev, ScrollingBackground& land, SDL_Texture*& land_prev, Column* colu1, Column* colu2, Column* colu3, long& choose) {
+    bool startMenu (SDL_Renderer* renderer, bool& volume, Sprite& flappy_bird, ScrollingBackground& background, SDL_Texture*& bg_prev, ScrollingBackground& land, SDL_Texture*& land_prev, long& choose, long& choose_bird) {
         SDL_Texture* start_fb = IMG_LoadTexture(renderer, "picture\\start_flappy.png");
         SDL_Texture* play = IMG_LoadTexture(renderer, "picture\\click\\play.png");
         SDL_Texture* play_click = IMG_LoadTexture(renderer, "picture\\click\\play_click.png");
@@ -167,7 +203,15 @@ struct Menu {
         SDL_Texture* option_click = IMG_LoadTexture(renderer, "picture\\click\\option_click.png");
         SDL_Texture* volume_on = IMG_LoadTexture(renderer, "picture\\volume_on.png");
         SDL_Texture* volume_off = IMG_LoadTexture(renderer, "picture\\volume_off.png");
+        SDL_Texture* background_1 = IMG_LoadTexture(renderer, "picture\\map\\background_1.png");
+        SDL_Texture* background_2 = IMG_LoadTexture(renderer, "picture\\map\\background_2.png");
+        SDL_Texture* background_3 = IMG_LoadTexture(renderer, "picture\\map\\background_3.png");
+        SDL_Texture* land1 = IMG_LoadTexture(renderer, "picture\\land\\land1.jpg");
+        SDL_Texture* land2 = IMG_LoadTexture(renderer, "picture\\land\\land2.png");
+        SDL_Texture* land3 = IMG_LoadTexture(renderer, "picture\\land\\land3.jpg");
         SDL_Texture* FL_Bird_Yell_Texture = IMG_LoadTexture(renderer, "picture\\bird\\bird.png");
+        SDL_Texture* FL_Bird_Blue_Texture = IMG_LoadTexture(renderer, "picture\\bird\\bird_blue.png");
+        SDL_Texture* FL_Bird_Red_Texture = IMG_LoadTexture(renderer, "picture\\bird\\bird_red.png");
 
         bool quit = false;
         SDL_Event event;
@@ -180,9 +224,9 @@ struct Menu {
                      exit(0);
                      break;
                 case SDL_MOUSEBUTTONDOWN:
-                     if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 300 && y < 355) return true;
+                     if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 300 && y < 355) quit = true;
                      if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 400 && y < 455) {
-                        optionMenu(renderer, flappy_bird, background, bg_prev, land, land_prev, colu1, colu2, colu3, choose);
+                        optionMenu(renderer, flappy_bird, background, bg_prev, land, land_prev, choose, choose_bird);
                      }
                      break;
             }
@@ -192,6 +236,17 @@ struct Menu {
             land.scroll(2);
             render_back_land(land, renderer);
 
+            switch (choose_bird) {
+            case 1:
+                flappy_bird.init(FL_Bird_Yell_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                break;
+            case 2:
+                flappy_bird.init(FL_Bird_Red_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                break;
+            case 3:
+                flappy_bird.init(FL_Bird_Blue_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                break;
+            }
             flappy_bird.SetPos(SCREEN_WIDTH / 2 - 30, SCREEN_HEIGHT / 2 - 60);
             flappy_bird.tick();
             flappy_bird.Render(renderer);
@@ -216,11 +271,44 @@ struct Menu {
                 renderTexture(option_click, SCREEN_WIDTH/2 - 75, 400, renderer);
             else renderTexture(option, SCREEN_WIDTH/2 - 75, 400, renderer);
 
-
             SDL_RenderPresent(renderer);
 
+            switch (choose) {
+                case 1:
+                    bg_prev = background_1;
+                    land_prev = land1;
+                    break;
+                case 2:
+                    bg_prev = background_2;
+                    land_prev = land2;
+                    break;
+                case 3:
+                    bg_prev = background_3;
+                    land_prev = land3;
+                    break;
+            }
+
         }
-        return false;
+
+        SDL_DestroyTexture(start_fb); start_fb = NULL;
+        SDL_DestroyTexture(play); play = NULL;
+        SDL_DestroyTexture(play_click); play_click = NULL;
+        SDL_DestroyTexture(option); option = NULL;
+        SDL_DestroyTexture(option_click); option_click = NULL;
+        SDL_DestroyTexture(volume_on); volume_on = NULL;
+        SDL_DestroyTexture(volume_off); volume_off = NULL;
+        SDL_DestroyTexture(FL_Bird_Yell_Texture); FL_Bird_Yell_Texture = NULL;
+        SDL_DestroyTexture(land1); land1 = NULL;
+        SDL_DestroyTexture(land2); land2 = NULL;
+        SDL_DestroyTexture(land3); land3 = NULL;
+        SDL_DestroyTexture(background_1); background_1 = NULL;
+        SDL_DestroyTexture(background_2); background_2 = NULL;
+        SDL_DestroyTexture(background_3); background_3 = NULL;
+        SDL_DestroyTexture(FL_Bird_Yell_Texture); FL_Bird_Yell_Texture = NULL;
+        SDL_DestroyTexture(FL_Bird_Blue_Texture); FL_Bird_Blue_Texture = NULL;
+        SDL_DestroyTexture(FL_Bird_Red_Texture); FL_Bird_Red_Texture = NULL;
+
+        return quit;
     }
 
     bool overMenu (SDL_Renderer* renderer, long Score, long maxScore) {
@@ -236,7 +324,7 @@ struct Menu {
         TTF_Font* font = loadFont("Gameplay Regular.ttf", 22);
         SDL_Color color = {125, 125, 125, 0};
 
-        bool quit = false;
+        bool quit = false, over = false;
         SDL_Event event;
         int x, y;
         while (!quit) {
@@ -259,13 +347,6 @@ struct Menu {
                     else renderTexture(gold, SCREEN_WIDTH/2 - 100 , 270, renderer);
             }
 
-            if (event.type == SDL_MOUSEBUTTONDOWN) {
-                    if (x > (SCREEN_WIDTH/2 + 5) && x < (SCREEN_WIDTH/2 + 115) && y > 380 && y < 420) return false;
-                    if (x > (SCREEN_WIDTH/2 - 115) && x < (SCREEN_WIDTH/2 - 5) && y > 380 && y < 420) {
-                          return true;
-                }
-            }
-
             if (x > (SCREEN_WIDTH/2 - 115) && x < (SCREEN_WIDTH/2 - 5) && y > 380 && y < 420)
                 renderTexture(playAgain_click, SCREEN_WIDTH/2 - 115, 380, renderer);
             else renderTexture(playAgain, SCREEN_WIDTH/2 - 115, 380, renderer);
@@ -273,9 +354,32 @@ struct Menu {
                 renderTexture(Exit_click, SCREEN_WIDTH/2 + 5, 380, renderer);
             else renderTexture(Exit, SCREEN_WIDTH/2 + 5, 380, renderer);
 
+            if (event.type == SDL_MOUSEBUTTONDOWN) {
+                if (x > (SCREEN_WIDTH/2 + 5) && x < (SCREEN_WIDTH/2 + 115) && y > 380 && y < 420) {
+                    over = false;
+                    quit = true;
+                }
+                if (x > (SCREEN_WIDTH/2 - 115) && x < (SCREEN_WIDTH/2 - 5) && y > 380 && y < 420) {
+                    over = true;
+                    quit = true;
+                }
+            }
             SDL_RenderPresent(renderer);
+
+            SDL_DestroyTexture(GradeMin); GradeMin = NULL;
+            SDL_DestroyTexture(MaxScore); MaxScore = NULL;
         }
-        return false;
+        SDL_DestroyTexture(Exit); Exit = NULL;
+        SDL_DestroyTexture(Exit_click); Exit_click = NULL;
+        SDL_DestroyTexture(playAgain); playAgain = NULL;
+        SDL_DestroyTexture(playAgain_click); playAgain_click = NULL;
+        SDL_DestroyTexture(gameOver); gameOver = NULL;
+        SDL_DestroyTexture(silver); silver = NULL;
+        SDL_DestroyTexture(honor); honor = NULL;
+        SDL_DestroyTexture(gold); gold = NULL;
+        TTF_CloseFont( font );
+
+        return over;
     }
 
     void pause (SDL_Renderer* renderer, bool& volume) {
@@ -301,6 +405,7 @@ struct Menu {
             renderTexture (unpause, 20, 20, renderer);
             SDL_RenderPresent(renderer);
         }
+        SDL_DestroyTexture(unpause); unpause = NULL;
     }
 };
 #endif // MENU_H

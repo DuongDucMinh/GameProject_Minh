@@ -64,8 +64,10 @@ int main(int argc, char *argv[])
     colu3->LoadImageColumn(graphics.renderer, 1);
 
     Sprite flappy_bird;
-    SDL_Texture* FL_Bird_Texture = graphics.loadTexture("picture\\bird\\bird.png");
-    flappy_bird.init(FL_Bird_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+    SDL_Texture* FL_Bird_Yell_Texture = graphics.loadTexture("picture\\bird\\bird.png");
+    SDL_Texture* FL_Bird_Blue_Texture = graphics.loadTexture("picture\\bird\\bird_blue.png");
+    SDL_Texture* FL_Bird_Red_Texture = graphics.loadTexture("picture\\bird\\bird_red.png");
+
     Sprite monster;
     SDL_Texture* MONSTER_Texture = graphics.loadTexture("picture\\sprite\\monster.png");
     monster.init(MONSTER_Texture, MONSTER_FRAMES, MONSTER_CLIPS);
@@ -100,7 +102,7 @@ int main(int argc, char *argv[])
     SDL_Event event;
     int x, y;
 
-    long Count = 0, die_count = HEART, maxScore, choose = 1;
+    long Count = 0, die_count = HEART, maxScore, choose = 1, choose_bird = 1;
 
     ifstream in_file("D:\\C++\\GameProject\\maxScore.txt");
     if (in_file.is_open()) {
@@ -114,16 +116,30 @@ int main(int argc, char *argv[])
             lose_ = false;
             start_ = false;
             wait = true;
-            continue_ = menu.startMenu(graphics.renderer, volume_on, flappy_bird, background, bg_prev, land, land_prev, colu1, colu2, colu3, choose);
+            continue_ = menu.startMenu(graphics.renderer, volume_on, flappy_bird, background, bg_prev, land, land_prev, choose, choose_bird);
             Count = 0;
             die_count = HEART;
             flappy_bird.SetPos(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
+            switch (choose_bird) {
+            case 1:
+                flappy_bird.init(FL_Bird_Yell_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                break;
+            case 2:
+                flappy_bird.init(FL_Bird_Red_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                break;
+            case 3:
+                flappy_bird.init(FL_Bird_Blue_Texture, FL_BIRD_FRAMES, FL_BIRD_CLIPS);
+                break;
+            }
             monster.SetPos(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 220) + 40);
             bat.SetPos(SCREEN_WIDTH + 20, rand() % (SCREEN_HEIGHT - 220) + 40);
             bananas.SetBatDau();
             melon.SetBatDau();
             saw.SetBatDau();
             saw2.SetBatDau();
+            colu1->LoadImageColumn(graphics.renderer, choose);
+            colu2->LoadImageColumn(graphics.renderer, choose);
+            colu3->LoadImageColumn(graphics.renderer, choose);
             colu1->SetBatDau(wcol, hcol, SCREEN_WIDTH);
             colu2->SetBatDau(wcol, hcol, SCREEN_WIDTH + COLUMN_DISTANCE);
             colu3->SetBatDau(wcol, hcol, SCREEN_WIDTH + 2*COLUMN_DISTANCE);
@@ -309,6 +325,8 @@ int main(int argc, char *argv[])
 
             graphics.presentScene();
 
+            SDL_DestroyTexture(Grade); Grade = NULL;
+
             if(wait){
                 wait = false;
                 waitUntilKeyPressed();
@@ -331,6 +349,21 @@ int main(int argc, char *argv[])
         out_file << maxScore;
     }
     out_file.close();
+
+    SDL_DestroyTexture(pause); pause = NULL;
+    SDL_DestroyTexture(heart); heart = NULL;
+    SDL_DestroyTexture(bg_prev); bg_prev = NULL;
+    SDL_DestroyTexture(land_prev); land_prev = NULL;
+    SDL_DestroyTexture(FL_Bird_Yell_Texture); FL_Bird_Yell_Texture = NULL;
+    SDL_DestroyTexture(FL_Bird_Blue_Texture); FL_Bird_Blue_Texture = NULL;
+    SDL_DestroyTexture(FL_Bird_Red_Texture); FL_Bird_Red_Texture = NULL;
+    SDL_DestroyTexture(MONSTER_Texture); MONSTER_Texture = NULL;
+    SDL_DestroyTexture(BAT_Texture); BAT_Texture = NULL;
+    SDL_DestroyTexture(SAW_Texture); SAW_Texture = NULL;
+    SDL_DestroyTexture(BANANAS_Texture); BANANAS_Texture = NULL;
+    SDL_DestroyTexture(MELON_Texture); MELON_Texture = NULL;
+    SDL_DestroyTexture(COLLECTED_Texture); COLLECTED_Texture = NULL;
+    TTF_CloseFont( font );
 
     if (gJump != nullptr) Mix_FreeChunk(gJump);
     if (fpass != nullptr) Mix_FreeChunk(fpass);
