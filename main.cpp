@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     SDL_Event event;
     int x, y;
 
-    long Count = 0, die_count = HEART, maxScore;
+    long Count = 0, die_count = HEART, maxScore, choose = 1;
 
     ifstream in_file("D:\\C++\\GameProject\\maxScore.txt");
     if (in_file.is_open()) {
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
             lose_ = false;
             start_ = false;
             wait = true;
-            continue_ = menu.startMenu(graphics.renderer, volume_on, flappy_bird, background, bg_prev, land, land_prev, colu1, colu2, colu3);
+            continue_ = menu.startMenu(graphics.renderer, volume_on, flappy_bird, background, bg_prev, land, land_prev, colu1, colu2, colu3, choose);
             Count = 0;
             die_count = HEART;
             flappy_bird.SetPos(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3);
@@ -299,13 +299,13 @@ int main(int argc, char *argv[])
             flappy_bird.Render(graphics.renderer);
 
             SDL_Texture* Grade = graphics.renderText(vers(Count), font, color);
-            graphics.renderTexture(Grade, SCREEN_WIDTH/2 - 5 , 17 );
+            graphics.renderTexture(Grade, SCREEN_WIDTH/2 - 10 , 17 );
             for (int i = 1; i <= die_count; i++) {
                 graphics.renderTexture( heart , SCREEN_WIDTH - 20 - 30*i , 24);
             }
 
             graphics.renderTexture(pause, 20 , 20 );
-            if (event.type == SDL_MOUSEBUTTONDOWN && x > 20 && x < 52 && y > 20 && y < 54) menu.pause(graphics.renderer, volume_on);
+            if (event.type == SDL_MOUSEBUTTONDOWN && x > 20 && x < 58 && y > 20 && y < 60) menu.pause(graphics.renderer, volume_on);
 
             graphics.presentScene();
 

@@ -15,10 +15,8 @@
 #define COLUMN_DISTANCE 255
 #define HEART 3
 
-#define COLUMN_INTERVAL 5000
-
-const int SCREEN_WIDTH = 700; // 800 350 700
-const int SCREEN_HEIGHT = 570; // 600 480
+const int SCREEN_WIDTH = 700;
+const int SCREEN_HEIGHT = 570;
 const int COLUMN_WIDTH = 65;
 
 const int FL_BIRD_CLIPS[][4] = {
@@ -62,33 +60,33 @@ const int SAW_CLIPS[][4] = {
 const int SAW_FRAMES = sizeof(SAW_CLIPS)/sizeof(int)/4;
 
 const int BANANAS_CLIPS[][4] = {
-    {  0, 0, 32, 32},
-    { 32, 0, 32, 32},
-    { 64, 0, 32, 32},
-    { 96, 0, 32, 32},
-    {128, 0, 32, 32},
-    {160, 0, 32, 32},
-    {192, 0, 32, 32},
-    {224, 0, 32, 32},
-    {256, 0, 32, 32},
-    {288, 0, 32, 32},
-    {320, 0, 32, 32},
-    {352, 0, 32, 32},
-    {284, 0, 32, 32},
-    {416, 0, 32, 32},
-    {448, 0, 32, 32},
-    {480, 0, 32, 32},
-    {512, 0, 32, 32},
+    {  0, 0, 50, 50},
+    { 50, 0, 50, 50},
+    {100, 0, 50, 50},
+    {150, 0, 50, 50},
+    {200, 0, 50, 50},
+    {250, 0, 50, 50},
+    {300, 0, 50, 50},
+    {350, 0, 50, 50},
+    {400, 0, 50, 50},
+    {450, 0, 50, 50},
+    {500, 0, 50, 50},
+    {550, 0, 50, 50},
+    {600, 0, 50, 50},
+    {650, 0, 50, 50},
+    {700, 0, 50, 50},
+    {750, 0, 50, 50},
+    {800, 0, 50, 50},
 };
 const int BANANAS_FRAMES = sizeof(BANANAS_CLIPS)/sizeof(int)/4;
 
 const int COLLECTED_CLIPS[][4] = {
-    {  0, 0, 32, 32},
-    { 32, 0, 32, 32},
-    { 64, 0, 32, 32},
-    { 96, 0, 32, 32},
-    {128, 0, 32, 32},
-    {160, 0, 32, 32},
+    {  0, 0, 50, 50},
+    { 50, 0, 50, 50},
+    {100, 0, 50, 50},
+    {150, 0, 50, 50},
+    {200, 0, 50, 50},
+    {250, 0, 50, 50},
 };
 const int COLLECTED_FRAMES = sizeof(COLLECTED_CLIPS)/sizeof(int)/4;
 
