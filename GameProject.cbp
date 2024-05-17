@@ -32,12 +32,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="Collition.cpp" />
-		<Unit filename="Collition.h" />
 		<Unit filename="column.cpp" />
 		<Unit filename="column.h" />
 		<Unit filename="def.h" />
-		<Unit filename="game.h" />
 		<Unit filename="graphics.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="menu.h" />

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <fstream>
-#include <cstdlib> // for rand() and srand()
-#include <ctime>   // for time()
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>

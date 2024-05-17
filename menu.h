@@ -28,7 +28,6 @@ struct Menu {
         renderTexture(background.texture, background.scrollingOffset, 485, renderer);
         renderTexture(background.texture, background.scrollingOffset - background.width, 485, renderer);
     }
-    // TEXT
     TTF_Font* loadFont(const char* path, int size)
     {
         TTF_Font* gFont = TTF_OpenFont( path, size );
@@ -53,7 +52,7 @@ struct Menu {
         SDL_FreeSurface( textSurface );
         return texture;
     }
-    void optionMenu (SDL_Renderer* renderer, Sprite& flappy_bird, ScrollingBackground& background, SDL_Texture*& bg_prev, ScrollingBackground& land, SDL_Texture*& land_prev, long& choose, long& choose_bird) {
+    void optionMenu (SDL_Renderer* renderer, Sprite flappy_bird, ScrollingBackground& background, SDL_Texture*& bg_prev, ScrollingBackground& land, SDL_Texture*& land_prev, long& choose, long& choose_bird) {
         SDL_Texture* bird_yell = IMG_LoadTexture(renderer, "picture\\bird\\bird_yell_pic.png");
         SDL_Texture* bird_red = IMG_LoadTexture(renderer, "picture\\bird\\bird_red_pic.png");
         SDL_Texture* bird_blue = IMG_LoadTexture(renderer, "picture\\bird\\bird_blue_pic.png");
@@ -68,7 +67,8 @@ struct Menu {
         SDL_Texture* land3 = IMG_LoadTexture(renderer, "picture\\land\\land3.jpg");
 
         SDL_Texture* Back = IMG_LoadTexture(renderer, "picture\\back.png");
-        SDL_Texture* Vien = IMG_LoadTexture(renderer, "picture\\vien_green.png");
+        SDL_Texture* Vien_bg = IMG_LoadTexture(renderer, "picture\\vien_bg.png");
+        SDL_Texture* Vien_bird = IMG_LoadTexture(renderer, "picture\\vien_bird.png");
 
         SDL_Texture* FL_Bird_Yell_Texture = IMG_LoadTexture(renderer, "picture\\bird\\bird.png");
         SDL_Texture* FL_Bird_Blue_Texture = IMG_LoadTexture(renderer, "picture\\bird\\bird_blue.png");
@@ -139,13 +139,25 @@ struct Menu {
 
             switch (choose) {
                 case 1:
-                    renderTexture(Vien, SCREEN_WIDTH/2 - 269, 347, renderer);
+                    renderTexture(Vien_bg, SCREEN_WIDTH/2 - 269, 347, renderer);
                     break;
                 case 2:
-                    renderTexture(Vien, SCREEN_WIDTH/2 - 58, 347, renderer);
+                    renderTexture(Vien_bg, SCREEN_WIDTH/2 - 58, 347, renderer);
                     break;
                 case 3:
-                    renderTexture(Vien, SCREEN_WIDTH/2 + 153, 347, renderer);
+                    renderTexture(Vien_bg, SCREEN_WIDTH/2 + 153, 347, renderer);
+                    break;
+            }
+
+            switch (choose_bird) {
+                case 1:
+                    renderTexture(Vien_bird, SCREEN_WIDTH/2 - 242, 194, renderer);
+                    break;
+                case 2:
+                    renderTexture(Vien_bird, SCREEN_WIDTH/2 - 33, 194, renderer);
+                    break;
+                case 3:
+                    renderTexture(Vien_bird, SCREEN_WIDTH/2 + 176, 194, renderer);
                     break;
             }
 
@@ -191,11 +203,12 @@ struct Menu {
         SDL_DestroyTexture(choose_char); choose_char = NULL;
         SDL_DestroyTexture(choose_map); choose_map = NULL;
         SDL_DestroyTexture(Back); Back = NULL;
-        SDL_DestroyTexture(Vien); Vien = NULL;
+        SDL_DestroyTexture(Vien_bg); Vien_bg = NULL;
+        SDL_DestroyTexture(Vien_bird); Vien_bird = NULL;
         TTF_CloseFont( font );
     }
 
-    bool startMenu (SDL_Renderer* renderer, bool& volume, Sprite& flappy_bird, ScrollingBackground& background, SDL_Texture*& bg_prev, ScrollingBackground& land, SDL_Texture*& land_prev, long& choose, long& choose_bird) {
+    bool startMenu (SDL_Renderer* renderer, bool& volume, Sprite flappy_bird, ScrollingBackground& background, SDL_Texture*& bg_prev, ScrollingBackground& land, SDL_Texture*& land_prev, long& choose, long& choose_bird) {
         SDL_Texture* start_fb = IMG_LoadTexture(renderer, "picture\\start_flappy.png");
         SDL_Texture* play = IMG_LoadTexture(renderer, "picture\\click\\play.png");
         SDL_Texture* play_click = IMG_LoadTexture(renderer, "picture\\click\\play_click.png");
@@ -225,7 +238,7 @@ struct Menu {
                      break;
                 case SDL_MOUSEBUTTONDOWN:
                      if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 300 && y < 355) quit = true;
-                     if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 400 && y < 455) {
+                     if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 390 && y < 445) {
                         optionMenu(renderer, flappy_bird, background, bg_prev, land, land_prev, choose, choose_bird);
                      }
                      break;
@@ -267,9 +280,9 @@ struct Menu {
             if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 300 && y < 355)
                 renderTexture(play_click, SCREEN_WIDTH/2 - 75, 300, renderer);
             else renderTexture(play, SCREEN_WIDTH/2 - 75, 300, renderer);
-            if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 400 && y < 455)
-                renderTexture(option_click, SCREEN_WIDTH/2 - 75, 400, renderer);
-            else renderTexture(option, SCREEN_WIDTH/2 - 75, 400, renderer);
+            if (x > (SCREEN_WIDTH/2 - 75) && x < (SCREEN_WIDTH/2 + 75) && y > 390 && y < 445)
+                renderTexture(option_click, SCREEN_WIDTH/2 - 75, 390, renderer);
+            else renderTexture(option, SCREEN_WIDTH/2 - 75, 390, renderer);
 
             SDL_RenderPresent(renderer);
 

@@ -101,7 +101,7 @@ struct Sprite
         }
         return false;
     }
-    //Chim xanh
+
     void moveMonster(){
         x -= MONSTER_SPEED;
         if( x < -width ){
@@ -110,7 +110,7 @@ struct Sprite
             y = rand() % (SCREEN_HEIGHT - 220) + 40;
         }
     }
-    // Dơi
+
     void moveDoi(){
         x -= DOI_SPEED;
         if( x < -width ){
@@ -119,7 +119,7 @@ struct Sprite
             y = rand() % (SCREEN_HEIGHT - 220) + 40;
         }
     }
-    //Saw
+
     void moveSaw(){
         x -= SAW_SPEED;
         if( x < -width ){
@@ -249,7 +249,6 @@ struct Graphics {
         SDL_Quit();
     }
 
-    // NẠP TEXT
     TTF_Font* loadFont(const char* path, int size)
     {
         TTF_Font* gFont = TTF_OpenFont( path, size );
@@ -275,7 +274,6 @@ struct Graphics {
         return texture;
     }
 
-    // BACKGROUND TRÔI
     void render_back (const ScrollingBackground& background)
     {
         renderTexture(background.texture, background.scrollingOffset, 0);
@@ -294,7 +292,6 @@ struct Graphics {
         SDL_RenderCopy(renderer, sprite.texture, clip, &renderQuad);
     }
 
-    // MUSIC
     Mix_Music *loadMusic(const char* path)
     {
         Mix_Music *gMusic = Mix_LoadMUS(path);
