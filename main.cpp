@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
                 if (volume_on) graphics.play(touch);
             }
 
-            if (Count >= 10) {
+            if (Count >= 7) {
                 colu1->move2();
                 colu2->move2();
                 colu3->move2();
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
             land.scroll(2);
             graphics.render_back_land(land);
 
-            if (Count >= 12) {
+            if (Count >= 9) {
                 monster.moveMonster();
                 monster.tick();
                 monster.Render(graphics.renderer);
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
 
             }
 
-            if (Count >= 15) {
+            if (Count >= 10) {
                 bat.moveDoi();
                 bat.tick();
                 bat.Render(graphics.renderer);
@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
                     if (volume_on) graphics.play(touch);
                 }
             }
-            if (Count >= 10) {
+            if (Count >= 8) {
                 saw2.moveSaw();
                 saw2.tick();
                 saw2.Render(graphics.renderer);
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
                 start_ = false;
             }
 
-            if (Count >= 5) {
+            if (Count >= 4) {
                 Collected.SetPos((int)bananas.x, (int)bananas.y);
                 bananas.moveSaw();
                 bananas.tick();
@@ -290,7 +290,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-            if (Count >= 10) {
+            if (Count >= 8) {
                 Collected.SetPos((int)melon.x, (int)melon.y);
                 melon.moveSaw();
                 melon.tick();
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
             }
 
             graphics.renderTexture(pause, 20 , 20 );
-            if (event.type == SDL_MOUSEBUTTONDOWN && x > 20 && x < 58 && y > 20 && y < 60) menu.pause(graphics.renderer, volume_on);
+            if ((event.type == SDL_MOUSEBUTTONDOWN && x > 20 && x < 58 && y > 20 && y < 60) ) menu.pause(graphics.renderer, volume_on);
 
             graphics.presentScene();
 

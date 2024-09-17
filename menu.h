@@ -408,17 +408,16 @@ struct Menu {
             if (event.type == SDL_QUIT) {
                 exit(0);
             }
-            if ( event.type == SDL_MOUSEBUTTONDOWN) {
-                if (x > 20 && x < 58 && y > 20 && y < 50) {
+            if ( (event.type == SDL_MOUSEBUTTONDOWN && x > 20 && x < 58 && y > 20 && y < 50) ) {
                     SDL_Delay(100);
                     if (volume) Mix_VolumeMusic(128);
                     quit = true;
-                }
             }
             renderTexture (unpause, 20, 20, renderer);
             SDL_RenderPresent(renderer);
         }
         SDL_DestroyTexture(unpause); unpause = NULL;
+        // event.type == SDL_KEYDOWN  && event.key.keysym.scancode == SDL_SCANCODE_D
     }
 };
 #endif // MENU_H

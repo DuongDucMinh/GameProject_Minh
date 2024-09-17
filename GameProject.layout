@@ -2,9 +2,24 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="menu.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="column.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="10365" topLine="66" />
+			<Cursor1 position="958" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="852" topLine="15" />
+		</Cursor>
+	</File>
+	<File name="column.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="362" topLine="4" />
+		</Cursor>
+	</File>
+	<File name="menu.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5737" topLine="0" />
 		</Cursor>
 		<Folding>
 			<Collapse line="11" />
@@ -15,12 +30,12 @@
 	</File>
 	<File name="graphics.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2022" topLine="61" />
+			<Cursor1 position="1597" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="def.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="341" topLine="0" />
+			<Cursor1 position="61" topLine="0" />
 		</Cursor>
 		<Folding>
 			<Collapse line="21" />
@@ -30,20 +45,5 @@
 			<Collapse line="61" />
 			<Collapse line="82" />
 		</Folding>
-	</File>
-	<File name="column.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="867" topLine="9" />
-		</Cursor>
-	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="82" topLine="42" />
-		</Cursor>
-	</File>
-	<File name="column.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="232" topLine="0" />
-		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
